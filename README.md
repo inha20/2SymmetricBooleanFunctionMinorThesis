@@ -1,8 +1,15 @@
-# SymmetricBooleanFunctionMinorThesis
+# 2SymmetricBooleanFunctionMinorThesis-main
 
 **4변수 완전대칭함수의 카르노맵 시각 패턴 분류와 Hamming Weight 층 구조를 이용한 해석**
 
 > 카르노맵의 시각적 패턴과 Boolean 공간 구조의 대응 관계 연구
+
+---
+
+## 보기
+
+- **GitHub Pages:** [논문 온라인 보기](https://cjh3c.github.io/2SymmetricBooleanFunctionMinorThesis-main/)
+- **논문 원문 (Markdown):** [`thesis.md`](./thesis.md)
 
 ---
 
@@ -27,23 +34,26 @@
 
 ```
 .
-├── thesis.md          # 통합 완성본 (메인 문서)
-├── images/            # 논문 그림 (그림 1~13)
-│   ├── 01.png         # 그림 1: 4변수 카르노맵의 Gray Code 배열
-│   ├── 02.png         # 그림 2: Boolean 공간의 Layer 구조
-│   ├── 03.png         # 그림 3: Exactly-0 점 패턴
-│   ├── 04.png         # 그림 4: Exactly-1 모서리 패턴
-│   ├── 05.png         # 그림 5: Exactly-2 고리 패턴
-│   ├── 06.png         # 그림 6: Exactly-3 모서리 패턴
-│   ├── 07.png         # 그림 7: Exactly-4 점 패턴
-│   ├── 08.png         # 그림 8: XOR 체커보드 (0132)
-│   ├── 09.png         # 그림 9: XNOR 체커보드 (0132)
-│   ├── 10.png         # 그림 10: XOR 이중대각 (0123)
-│   ├── 11.png         # 그림 11: XNOR 이중대각 (0123)
-│   ├── 12.png         # 그림 12: XOR 체커보드 생성 원리
-│   └── 13.png         # 그림 13: Layer 구조와 시각 패턴 관계 모형
+├── thesis.md            # 통합 완성본 (메인 문서)
+├── index.html           # GitHub Pages 논문 렌더링
 ├── README.md
-└── index.html         # GitHub Pages
+├── RESEARCH_CONTEXT.md  # 연구 프로그램 맥락
+├── PROJECT_STATUS.md    # 현재 상태 및 향후 연구 방향
+├── .gitignore
+└── images/              # 논문 그림 (그림 1~13)
+    ├── 01.png           # 그림 1: 4변수 카르노맵의 Gray Code 배열
+    ├── 02.png           # 그림 2: Boolean 공간의 Layer 구조
+    ├── 03.png           # 그림 3: Exactly-0 점 패턴
+    ├── 04.png           # 그림 4: Exactly-1 모서리 패턴
+    ├── 05.png           # 그림 5: Exactly-2 고리 패턴
+    ├── 06.png           # 그림 6: Exactly-3 모서리 패턴
+    ├── 07.png           # 그림 7: Exactly-4 점 패턴
+    ├── 08.png           # 그림 8: XOR 체커보드 (0132)
+    ├── 09.png           # 그림 9: XNOR 체커보드 (0132)
+    ├── 10.png           # 그림 10: XOR 이중대각 (0123)
+    ├── 11.png           # 그림 11: XNOR 이중대각 (0123)
+    ├── 12.png           # 그림 12: XOR 체커보드 생성 원리
+    └── 13.png           # 그림 13: Layer 구조와 시각 패턴 관계 모형
 ```
 
 > **참고:** `images/` 폴더의 파일명은 2자리 숫자 형식(`01.png`~`13.png`)으로 통일되어 있습니다.
