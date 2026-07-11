@@ -136,4 +136,4 @@ This repository is part of the **Structure Recognition Research Program**.
 ## Author
 
 Choi Jonghun  
-Inha University
+Independent researcher · Graduate of Inha Technical College
