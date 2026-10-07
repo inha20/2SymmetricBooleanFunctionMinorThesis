@@ -1,840 +1,1166 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>카르노맵의 시각적 패턴과 Boolean 공간 구조의 대응 관계 연구</title>
-  <meta name="description" content="Independent research by Jonghun Choi, a graduate of Inha Technical College, on visual patterns formed by symmetric Boolean functions on 4-variable Karnaugh maps, interpreted through Hamming Weight layer structure. Examines point, corner, ring, checkerboard, and double-diagonal patterns under Gray code and standard binary arrangements." />
-  <meta name="keywords" content="Karnaugh map, symmetric Boolean function, Hamming weight, layer structure, checkerboard pattern, double-diagonal pattern, ring pattern, Gray code, XOR XNOR, visual pattern analysis, structure recognition" />
-  <script>
-    MathJax = {
-      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
-      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
-    };
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.min.js"></script>
+  <title>카르노맵의 시각적 패턴과 Boolean 공간 구조의 대응 관계 연구 | Paper 2</title>
+  <meta name="description" content="인하공업전문대학 출신 독립 연구자 최종훈의 소논문. 4변수 카르노맵 완전대칭함수의 시각 패턴을 분석하고, 이를 Hamming Weight 기반 Layer 구조와 Gray Code 인접성 보존 성질의 상호작용으로 해석합니다." />
+  <meta name="keywords" content="카르노맵, 완전대칭함수, 해밍 가중치, Layer 구조, 체커보드 패턴, 이중대각 패턴, 고리 패턴, 그레이코드, 인하공업전문대학, 최종훈" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX for ultra-fast, sharp math typesetting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
   <style>
     :root {
-      --bg: #fafaf8;
+      --font-serif: 'Newsreader', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+
+      /* Light Theme (Academic Ivory & Slate) */
+      --bg: #fbfbf9;
+      --bg-alt: #f4f3ef;
       --surface: #ffffff;
-      --border: #e0ddd8;
-      --text: #1a1a1a;
-      --text-sub: #555;
-      --accent: #2a4d8f;
-      --accent-light: #eef2fa;
-      --code-bg: #f4f2ee;
+      --surface-hover: #faf9f6;
+      --border: #e6e3dc;
+      --border-subtle: #eceae5;
+      --border-focus: #254b8c;
+      --text: #1a1b26;
+      --text-muted: #575a6e;
+      --text-faint: #898c9f;
+
+      --accent: #254b8c;
+      --accent-hover: #1b3868;
+      --accent-glow: rgba(37, 75, 140, 0.08);
+      --accent-surface: #eef3fc;
+
+      --teal: #0d9488;
+      --teal-bg: #f0fdfa;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --emerald: #059669;
+      --emerald-bg: #ecfdf5;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 12px 32px -4px rgba(0, 0, 0, 0.08);
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-full: 9999px;
+      --container-max: 980px;
     }
+
+    [data-theme="dark"] {
+      --bg: #0d0f17;
+      --bg-alt: #131622;
+      --surface: #181b2a;
+      --surface-hover: #1f2337;
+      --border: #262a3e;
+      --border-subtle: #1c2033;
+      --border-focus: #60a5fa;
+      --text: #f1f3fa;
+      --text-muted: #9ba1b9;
+      --text-faint: #636882;
+
+      --accent: #60a5fa;
+      --accent-hover: #93c5fd;
+      --accent-glow: rgba(96, 165, 250, 0.12);
+      --accent-surface: #162238;
+
+      --teal: #2dd4bf;
+      --teal-bg: #11292b;
+      --amber: #fbbf24;
+      --amber-bg: #292011;
+      --emerald: #34d399;
+      --emerald-bg: #064e3b;
+
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.45);
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Georgia', 'Nanum Myeongjo', serif;
-      font-size: 1rem;
-      line-height: 1.85;
+      font-family: var(--font-sans);
+      font-size: 1.02rem;
+      line-height: 1.8;
+      transition: background 0.25s ease, color 0.25s ease;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Layout ── */
-    .page-wrap { max-width: 880px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
 
-    /* ── Top nav ── */
-    .top-nav {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(255,255,255,0.93);
-      backdrop-filter: blur(6px);
+    /* ── Header ── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
-      padding: .6rem 1.5rem;
-      display: flex; gap: 1.4rem; flex-wrap: wrap;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: .82rem;
+      transition: border-color 0.25s ease;
     }
-    .top-nav a { color: var(--accent); text-decoration: none; }
-    .top-nav a:hover { text-decoration: underline; }
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 0.88rem;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s ease;
+      font-weight: 500;
+    }
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+    .nav-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .nav-dropbtn {
+      background: none;
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .nav-dropbtn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .nav-dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      background: var(--surface);
+      min-width: 260px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.5rem;
+      z-index: 101;
+    }
+    .nav-dropdown:hover .nav-dropdown-content {
+      display: block;
+    }
+    .nav-dropdown-content a {
+      color: var(--text);
+      padding: 0.5rem 0.75rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+    .nav-dropdown-content a:hover {
+      background: var(--accent-surface);
+      color: var(--accent);
+    }
+    .nav-dropdown-content a.active {
+      background: var(--accent-surface);
+      color: var(--accent);
+      font-weight: 700;
+    }
 
-    /* ── Cover ── */
-    .cover {
-      padding: 4rem 0 2.5rem;
+    .theme-toggle-btn {
+      background: none;
+      border: 1px solid var(--border);
+      padding: 0.4rem;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      transition: all 0.15s ease;
+    }
+    .theme-toggle-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .theme-toggle-btn svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── Subnav (TOC quick jump) ── */
+    .subnav {
+      position: sticky;
+      top: 53px;
+      z-index: 90;
+      background: var(--bg-alt);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 0.45rem 0;
+    }
+    .subnav-inner {
+      display: flex;
+      gap: 1.2rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .subnav-inner a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+    .subnav-inner a:hover, .subnav-inner a.active {
+      color: var(--accent);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 3.5rem 0 2rem;
       border-bottom: 1px solid var(--border);
       margin-bottom: 2.5rem;
     }
-    .cover .label {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: .78rem;
-      letter-spacing: .12em;
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.2rem;
+    }
+    .paper-badge {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      color: var(--text-sub);
-      margin-bottom: .8rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      background: var(--accent-surface);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
     }
-    .cover h1 {
-      font-size: 1.85rem;
-      font-weight: bold;
-      line-height: 1.4;
-      color: var(--text);
-      margin-bottom: .5rem;
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: 2.35rem;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.8rem;
     }
-    .cover .subtitle {
-      font-size: 1.05rem;
-      color: var(--text-sub);
+    .hero-sub {
+      font-family: var(--font-serif);
       font-style: italic;
-      margin-bottom: 1.6rem;
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
     }
-    .cover-meta {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: .85rem;
-      color: var(--text-sub);
+    .author-meta {
+      font-size: 0.9rem;
+      color: var(--text-faint);
+      margin-bottom: 1.75rem;
+    }
+    .author-meta b {
+      color: var(--text);
     }
 
-    /* ── Section headings ── */
-    h2 {
-      font-size: 1.3rem;
-      margin: 2.8rem 0 .9rem;
-      padding-bottom: .35rem;
-      border-bottom: 2px solid var(--accent);
+    /* ── Action Bar (Hero CTA) ── */
+    .action-bar {
+      display: flex;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.2rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: var(--font-sans);
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid transparent;
+      box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
       color: var(--accent);
+      background: var(--surface-hover);
+    }
+
+    /* ── Typography & Prose ── */
+    h2 {
+      font-family: var(--font-serif);
+      font-size: 1.7rem;
+      font-weight: 600;
+      margin: 3.2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1.5px solid var(--border);
+      color: var(--accent);
+      scroll-margin-top: 100px;
     }
     h3 {
-      font-size: 1.07rem;
-      margin: 1.9rem 0 .55rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 2.2rem 0 0.75rem;
+      color: var(--text);
+      scroll-margin-top: 100px;
+    }
+    p {
+      margin-bottom: 1.15rem;
       color: var(--text);
     }
-    h4 { font-size: 1rem; margin: 1.4rem 0 .4rem; }
-
-    /* ── Body text ── */
-    p { margin-bottom: 1rem; text-align: justify; }
+    strong { font-weight: 700; color: var(--text); }
     em { font-style: italic; }
-    strong { font-weight: 700; }
+
+    /* ── Cards & Boxes ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin: 1.75rem 0;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .abstract-box {
+      background: var(--accent-surface);
+      border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+      border-left: 5px solid var(--accent);
+      border-radius: var(--radius-md);
+      padding: 1.5rem 1.8rem;
+      margin: 1.8rem 0;
+    }
+    .abstract-title {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    /* ── Figures & Lightbox ── */
+    .academic-figure {
+      margin: 2.5rem 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .academic-figure:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+    }
+    .academic-figure img {
+      max-width: 100%;
+      height: auto;
+      border-radius: var(--radius-sm);
+      cursor: zoom-in;
+      background: #ffffff;
+      padding: 0.5rem;
+      border: 1px solid var(--border-subtle);
+    }
+    .academic-figure figcaption {
+      margin-top: 0.9rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      text-align: left;
+      padding: 0 0.5rem;
+    }
+    .academic-figure figcaption strong {
+      color: var(--accent);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      margin-right: 0.4rem;
+    }
+
+    /* Lightbox Modal */
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(13, 15, 23, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      cursor: zoom-out;
+    }
+    .lightbox-modal.active {
+      display: flex;
+    }
+    .lightbox-modal img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: var(--radius-md);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      background: #ffffff;
+      padding: 0.5rem;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 300;
+      cursor: pointer;
+    }
 
     /* ── Tables ── */
-    .tbl-wrap { overflow-x: auto; margin: 1.4rem 0; }
+    .tbl-wrap {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
     table {
       border-collapse: collapse;
       width: 100%;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: .88rem;
+      font-size: 0.92rem;
     }
     th {
-      background: var(--accent);
-      color: #fff;
-      padding: .5rem .9rem;
+      background: var(--bg-alt);
+      color: var(--text);
+      padding: 0.75rem 1rem;
       text-align: center;
       font-weight: 600;
+      border-bottom: 2px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
     }
-    td { padding: .45rem .9rem; border: 1px solid var(--border); text-align: center; }
-    tr:nth-child(even) td { background: var(--accent-light); }
-
-    /* ── Figures ── */
-    figure {
-      margin: 2rem 0;
+    td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border-subtle);
       text-align: center;
     }
-    figure img {
-      max-width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.07);
-    }
-    figcaption {
-      margin-top: .6rem;
-      font-size: .87rem;
-      color: var(--text-sub);
-      font-style: italic;
-    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface-hover); }
 
-    /* ── Code / pre ── */
-    pre, code {
-      font-family: 'Courier New', monospace;
-      font-size: .9em;
-      background: var(--code-bg);
-    }
+    /* ── Code / Math Flow ── */
     pre {
-      padding: 1rem;
-      border-left: 3px solid var(--accent);
-      border-radius: 2px;
+      font-family: var(--font-mono);
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
       overflow-x: auto;
-      margin: 1rem 0;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
-    code { padding: .1em .3em; border-radius: 2px; }
-    pre code { background: none; padding: 0; }
-
-    /* ── Abstract box ── */
-    .abstract {
-      background: var(--accent-light);
-      border-left: 4px solid var(--accent);
-      padding: 1.2rem 1.5rem;
-      margin: 2rem 0;
-      border-radius: 2px;
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.35rem;
+      border-radius: var(--radius-sm);
     }
-    .abstract-title {
-      font-family: 'Helvetica Neue', sans-serif;
-      font-weight: 700;
-      font-size: .85rem;
-      text-transform: uppercase;
-      letter-spacing: .08em;
+    pre code { background: none; border: none; padding: 0; }
+    .flow-box {
+      background: var(--bg-alt);
+      border: 1px dashed var(--border-focus);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.5rem;
+      margin: 1.5rem 0;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      text-align: center;
       color: var(--accent);
-      margin-bottom: .6rem;
+      font-weight: 500;
     }
 
-    /* ── Key result box ── */
-    .key-result {
+    /* ── TOC Box ── */
+    .toc-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.2rem 1.5rem;
-      margin: 1.5rem 0;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin: 2rem 0;
     }
-    .key-result-title {
-      font-family: 'Helvetica Neue', sans-serif;
+    .toc-card-title {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
       font-weight: 700;
-      font-size: .85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: var(--accent);
-      margin-bottom: .7rem;
+      margin-bottom: 1rem;
+    }
+    .toc-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.6rem 1.5rem;
+      list-style: none;
+    }
+    .toc-item a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.15s ease;
+    }
+    .toc-item a:hover { color: var(--accent); }
+    .toc-item b {
+      font-family: var(--font-mono);
+      color: var(--accent);
+      font-size: 0.82rem;
     }
 
-    /* ── Flow diagram (text) ── */
-    .flow {
-      background: var(--code-bg);
-      border-radius: 4px;
-      padding: .9rem 1.2rem;
-      margin: 1rem 0;
-      font-family: 'Courier New', monospace;
-      font-size: .9rem;
-      text-align: center;
-      letter-spacing: .04em;
+    /* ── BibTeX Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--accent);
+      box-shadow: var(--shadow-lg);
+      padding: 0.8rem 1.4rem;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 1000;
+      animation: fadeIn 0.2s ease;
     }
-
-    /* ── References ── */
-    .references ol {
-      padding-left: 1.6rem;
-      font-size: .9rem;
-      color: var(--text-sub);
+    .toast.show { display: flex; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .references li { margin-bottom: .4rem; }
 
     /* ── Footer ── */
-    footer {
+    .site-footer {
       border-top: 1px solid var(--border);
-      margin-top: 3.5rem;
-      padding-top: 1.2rem;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: .8rem;
-      color: var(--text-sub);
+      padding: 3rem 0;
+      margin-top: 5rem;
       text-align: center;
+      font-size: 0.88rem;
+      color: var(--text-faint);
     }
-    footer a { color: var(--accent); }
+    .site-footer a { color: var(--accent); text-decoration: none; }
+    .site-footer a:hover { text-decoration: underline; }
 
-    /* ── TOC ── */
-    .toc {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.2rem 1.5rem;
-      margin: 2rem 0;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: .88rem;
-    }
-    .toc-title { font-weight: 700; margin-bottom: .7rem; color: var(--accent); }
-    .toc ol { padding-left: 1.4rem; }
-    .toc li { margin: .25rem 0; }
-    .toc a { color: var(--text); text-decoration: none; }
-    .toc a:hover { color: var(--accent); text-decoration: underline; }
-    .toc .sub { padding-left: 1.2rem; list-style-type: lower-alpha; }
-
-    @media (max-width: 640px) {
-      .cover h1 { font-size: 1.35rem; }
-      .top-nav { font-size: .76rem; gap: 1rem; }
+    @media (max-width: 768px) {
+      .hero-title { font-size: 1.75rem; }
+      .nav-links { display: none; }
+      .subnav-inner { gap: 0.8rem; }
     }
   </style>
 </head>
 <body>
 
-<nav class="top-nav">
-  <a href="#abstract">초록</a>
-  <a href="#intro">1. 서론</a>
-  <a href="#theory">2. 이론</a>
-  <a href="#patterns">3. 패턴 정의</a>
-  <a href="#analysis">4. 분석</a>
-  <a href="#xor">5. XOR/XNOR 해석</a>
-  <a href="#arrangement">6. 배열 비교</a>
-  <a href="#conclusion">7. 결론</a>
-  <a href="#references">참고문헌</a>
-</nav>
+  <!-- ── Global Site Header ── -->
+  <header class="site-header">
+    <div class="container nav-inner">
+      <a class="brand" href="https://inha20.github.io/Research-Portfolio/">
+        <div class="brand-mark">P2</div>
+        <span>2SymmetricBooleanFunction</span>
+      </a>
 
-<div class="page-wrap">
+      <div style="display: flex; align-items: center; gap: 0.85rem;">
+        <nav class="nav-links">
+          <a href="https://inha20.github.io/Research-Portfolio/">Research Program</a>
+          <a href="https://github.com/inha20/inha20">Profile</a>
+          <a href="https://github.com/inha20/2SymmetricBooleanFunctionMinorThesis" target="_blank" rel="noopener">GitHub</a>
+        </nav>
 
-  <!-- ── Cover ── -->
-  <header class="cover">
-    <p class="label">Minor Thesis · 소논문</p>
-    <h1>카르노맵의 시각적 패턴과 Boolean 공간 구조의 대응 관계 연구</h1>
-    <p class="subtitle">4변수 완전대칭함수의 시각 패턴 분류와 Hamming Weight 층 구조를 이용한 해석</p>
-    <p class="cover-meta">
-      Repository: <a href="https://github.com/inha20/2SymmetricBooleanFunctionMinorThesis" style="color:var(--accent)">2SymmetricBooleanFunctionMinorThesis</a>
-    </p>
+        <!-- Program Jump Menu -->
+        <div class="nav-dropdown">
+          <button class="nav-dropbtn" aria-label="논문 이동 메뉴">
+            <span>Papers</span>
+            <span style="font-size:0.65rem;">▼</span>
+          </button>
+          <div class="nav-dropdown-content">
+            <a href="https://inha20.github.io/Research-Portfolio/"><b>Hub</b> Portfolio Overview</a>
+            <a href="https://inha20.github.io/1KMapStructureInvariance/"><b>P1</b> K-Map Structure Invariance</a>
+            <a href="#" class="active"><b>P2</b> Symmetric Boolean Functions</a>
+            <a href="https://inha20.github.io/3VariableRearrangementInvarianceMinorThesis/"><b>P3</b> Variable Rearrangement</a>
+            <a href="https://inha20.github.io/4StructureRecognitionTheory/"><b>P4</b> Structure Recognition (SRT)</a>
+            <a href="https://inha20.github.io/5HumanAIResearchCollaboration/"><b>P5</b> Human-AI Collaboration (HARCT)</a>
+            <a href="https://inha20.github.io/6BooleanFunctionSpaceTheory/"><b>P6</b> Boolean Space & S₄ Theory</a>
+          </div>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button id="themeToggle" class="theme-toggle-btn" title="Toggle Theme" aria-label="Toggle theme">
+          <svg id="themeIcon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
   </header>
 
-  <!-- ── TOC ── -->
-  <nav class="toc">
-    <p class="toc-title">목차</p>
-    <ol>
-      <li><a href="#abstract">초록</a></li>
-      <li><a href="#intro">서론</a>
-        <ol class="sub">
-          <li><a href="#intro-bg">연구 배경</a></li>
-          <li><a href="#intro-obj">연구 목적</a></li>
-          <li><a href="#intro-scope">연구 범위 및 방법</a></li>
-        </ol>
-      </li>
-      <li><a href="#theory">이론적 배경</a>
-        <ol class="sub">
-          <li><a href="#theory-kmap">카르노맵의 구조</a></li>
-          <li><a href="#theory-gray">Gray Code 배열과 일반 이진 배열</a></li>
-          <li><a href="#theory-sym">완전대칭함수와 Hamming Weight</a></li>
-          <li><a href="#theory-layer">Boolean 공간의 Layer 구조</a></li>
-          <li><a href="#theory-relation">Layer 구조와 시각 패턴</a></li>
-        </ol>
-      </li>
-      <li><a href="#patterns">시각 패턴의 정의</a></li>
-      <li><a href="#analysis">완전대칭함수의 시각 패턴 분석</a></li>
-      <li><a href="#xor">XOR/XNOR 패턴의 구조적 해석</a></li>
-      <li><a href="#arrangement">배열 방식에 따른 시각 패턴 변화</a></li>
-      <li><a href="#conclusion">결론</a></li>
-      <li><a href="#references">참고문헌</a></li>
-    </ol>
+  <!-- ── Subnav Section Quick-jump ── -->
+  <nav class="subnav">
+    <div class="container subnav-inner">
+      <a href="#abstract">초록</a>
+      <a href="#intro">1. 서론</a>
+      <a href="#theory">2. 이론적 배경</a>
+      <a href="#patterns">3. 패턴 정의</a>
+      <a href="#analysis">4. 대칭함수 분석</a>
+      <a href="#xor">5. XOR/XNOR 해석</a>
+      <a href="#arrangement">6. 배열 비교</a>
+      <a href="#conclusion">7. 결론</a>
+      <a href="#references">참고문헌</a>
+    </div>
   </nav>
 
-  <!-- ── Abstract ── -->
-  <section id="abstract">
-    <h2>초록</h2>
-    <div class="abstract">
-      <p class="abstract-title">Abstract</p>
-      <p>
-        카르노맵(Karnaugh Map)은 일반적으로 논리함수의 최소화를 위한 도구로 사용되며, 교육 현장에서도
-        SOP 및 POS 형태의 간소화 과정에 초점을 맞추어 설명되는 경우가 많다. 그러나 실제 카르노맵에는
-        체커보드 패턴, 이중대각 패턴, 고리 패턴 등 다양한 시각적 구조가 나타나며, 이러한 구조는 단순한
-        배열 결과가 아니라 Boolean 함수의 구조적 특성을 반영할 가능성이 있다.
-      </p>
-      <p>
-        본 연구에서는 4변수 카르노맵에 나타나는 완전대칭함수(Symmetric Boolean Function)의 시각 패턴을
-        분석하고, 이를 Hamming Weight 기반 Layer 구조의 관점에서 해석하였다. 특히 Exactly-k 함수와
-        XOR/XNOR 함수를 대상으로 Gray Code 배열(0132)과 일반 이진 배열(0123)을 비교하여 시각 패턴과
-        구조적 특성의 관계를 분석하였다.
-      </p>
-      <p>
-        분석 결과, Exactly-0 및 Exactly-4 함수는 <strong>점 패턴(Point Pattern)</strong>,
-        Exactly-1 및 Exactly-3 함수는 <strong>모서리 패턴(Corner Pattern)</strong>,
-        Exactly-2 함수는 <strong>고리 패턴(Ring Pattern)</strong>을 형성하였다.
-        또한 XOR 및 XNOR 함수는 배열 방식에 따라 <strong>체커보드 패턴(Checkerboard Pattern)</strong>
-        또는 <strong>이중대각 패턴(Double-Diagonal Pattern)</strong>으로 표현되었다.
-        특히 XOR 체커보드는 홀수 Layer 선택 구조와 Gray Code 배열의 인접성 보존 성질이 결합되어
-        형성되는 현상으로 해석할 수 있음을 확인하였다.
-      </p>
-      <p>
-        본 연구는 완전대칭함수를 특정 Layer 또는 Layer 집합을 선택하는 함수로 해석할 수 있음을 보이며,
-        카르노맵의 시각 패턴이 Layer 구조와 배열 방식의 상호작용 결과로 이해될 수 있음을 제안한다.
-        이를 통해 카르노맵을 단순한 논리 최소화 도구가 아니라 Boolean 공간의 구조를 시각적으로
-        표현하는 도구로 해석하는 새로운 관점을 제시한다.
-      </p>
+  <main class="container">
+
+    <!-- ── Hero ── -->
+    <section class="hero">
+      <div class="hero-meta">
+        <span class="paper-badge">Minor Thesis · Empirical Case Study 2</span>
+        <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-faint);">Boolean 공간 구조 & 카르노맵 시각 패턴</span>
+      </div>
+
+      <h1 class="hero-title">카르노맵의 시각적 패턴과 Boolean 공간 구조의 대응 관계 연구</h1>
+      <p class="hero-sub">4변수 완전대칭함수의 시각 패턴 분류와 Hamming Weight 층 구조를 이용한 해석</p>
+
+      <div class="author-meta">
+        <b>최종훈 (Choi Jonghun)</b> &nbsp;·&nbsp; Independent Researcher &nbsp;·&nbsp; Graduate of Inha Technical College
+      </div>
+
+      <!-- Hero Action Bar -->
+      <div class="action-bar">
+        <a href="thesis.pdf" class="btn btn-primary" download title="논문 PDF 다운로드">
+          <span>📄 논문 PDF 다운로드 (18p · 348KB)</span>
+        </a>
+        <a href="https://github.com/inha20/2SymmetricBooleanFunctionMinorThesis" target="_blank" rel="noopener" class="btn btn-secondary">
+          <span>💻 GitHub 리포지토리</span>
+        </a>
+        <button id="citeBtn" class="btn btn-secondary" title="BibTeX 인용 정보 복사">
+          <span>📑 BibTeX 인용 복사</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ── TOC Quick Card ── -->
+    <div class="toc-card">
+      <div class="toc-card-title">목차 / Table of Contents</div>
+      <ul class="toc-list">
+        <li class="toc-item"><a href="#abstract"><b>§ 0</b> 초록 / Abstract</a></li>
+        <li class="toc-item"><a href="#intro"><b>§ 1</b> 서론 (배경, 목적, 방법)</a></li>
+        <li class="toc-item"><a href="#theory"><b>§ 2</b> 이론적 배경 (Layer 구조)</a></li>
+        <li class="toc-item"><a href="#patterns"><b>§ 3</b> 시각 패턴의 정의 (5대 분류)</a></li>
+        <li class="toc-item"><a href="#analysis"><b>§ 4</b> 완전대칭함수 시각 패턴 분석</a></li>
+        <li class="toc-item"><a href="#xor"><b>§ 5</b> XOR/XNOR 구조적 해석</a></li>
+        <li class="toc-item"><a href="#arrangement"><b>§ 6</b> 배열 방식에 따른 패턴 변화</a></li>
+        <li class="toc-item"><a href="#conclusion"><b>§ 7</b> 결론 및 탐색적 가설</a></li>
+        <li class="toc-item"><a href="#references"><b>§ 8</b> 참고문헌 (References)</a></li>
+      </ul>
     </div>
 
-    <div class="key-result">
-      <p class="key-result-title">📊 핵심 결과 요약</p>
+    <!-- ── Abstract ── -->
+    <section id="abstract">
+      <h2>초록 / Abstract</h2>
+      <div class="abstract-box">
+        <div class="abstract-title">Abstract Summary</div>
+        <p>
+          카르노맵(Karnaugh Map)은 일반적으로 논리함수의 최소화를 위한 도구로 사용되며, 교육 현장에서도
+          SOP 및 POS 형태의 간소화 과정에 초점을 맞추어 설명되는 경우가 많다. 그러나 실제 카르노맵에는
+          체커보드 패턴, 이중대각 패턴, 고리 패턴 등 다양한 시각적 구조가 나타나며, 이러한 구조는 단순한
+          배열 결과가 아니라 Boolean 함수의 구조적 특성을 반영할 가능성이 있다.
+        </p>
+        <p>
+          본 연구에서는 4변수 카르노맵에 나타나는 완전대칭함수(Symmetric Boolean Function)의 시각 패턴을
+          분석하고, 이를 Hamming Weight 기반 Layer 구조의 관점에서 해석하였다. 특히 Exactly-$k$ 함수와
+          XOR/XNOR 함수를 대상으로 Gray Code 배열(0132)과 일반 이진 배열(0123)을 비교하여 시각 패턴과
+          구조적 특성의 관계를 분석하였다.
+        </p>
+        <p>
+          분석 결과, Exactly-0 및 Exactly-4 함수는 <strong>점 패턴(Point Pattern)</strong>,
+          Exactly-1 및 Exactly-3 함수는 <strong>모서리 패턴(Corner Pattern)</strong>,
+          Exactly-2 함수는 <strong>고리 패턴(Ring Pattern)</strong>을 형성하였다.
+          또한 XOR 및 XNOR 함수는 배열 방식에 따라 <strong>체커보드 패턴(Checkerboard Pattern)</strong>
+          또는 <strong>이중대각 패턴(Double-Diagonal Pattern)</strong>으로 표현되었다.
+          특히 XOR 체커보드는 홀수 Layer 선택 구조와 Gray Code 배열의 인접성 보존 성질이 결합되어
+          형성되는 현상으로 해석할 수 있음을 확인하였다.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-top:0;">📊 핵심 결과 요약 (Key Findings)</h3>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>함수</th><th>선택 Layer</th><th>시각 패턴</th><th>상태 수</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Exactly-0</strong></td><td>$L_0$</td><td>점 패턴 (Point)</td><td>1</td></tr>
+              <tr><td><strong>Exactly-1</strong></td><td>$L_1$</td><td>모서리 패턴 (Corner)</td><td>4</td></tr>
+              <tr><td><strong>Exactly-2</strong></td><td>$L_2$</td><td>고리 패턴 (Ring)</td><td>6</td></tr>
+              <tr><td><strong>Exactly-3</strong></td><td>$L_3$</td><td>모서리 패턴 (Corner)</td><td>4</td></tr>
+              <tr><td><strong>Exactly-4</strong></td><td>$L_4$</td><td>점 패턴 (Point)</td><td>1</td></tr>
+              <tr><td><strong>XOR</strong></td><td>$L_1 \cup L_3$</td><td>체커보드 (0132) / 이중대각 (0123)</td><td>8</td></tr>
+              <tr><td><strong>XNOR</strong></td><td>$L_0 \cup L_2 \cup L_4$</td><td>체커보드 (0132) / 이중대각 (0123)</td><td>8</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 1. Introduction ── -->
+    <section id="intro">
+      <h2>1. 서론</h2>
+
+      <h3 id="intro-bg">1.1 연구 배경</h3>
+      <p>
+        카르노맵은 디지털 논리회로 설계에서 논리식을 최소화하기 위한 대표적인 도구로 사용된다.
+        일반적인 교육 과정에서는 카르노맵의 인접 셀을 그룹화하여 SOP(Sum of Products) 또는
+        POS(Product of Sums) 형태의 최소 논리식을 도출하는 방법을 중심으로 설명한다.
+      </p>
+      <p>
+        그러나 실제 카르노맵을 관찰하면 단순한 그룹화 이상의 다양한 시각적 구조가 존재한다.
+        특히 XOR 및 XNOR 함수의 경우 일반적인 직사각형 그룹과는 다른 체커보드 형태의 패턴이 나타난다.
+        또한 배열 방식에 따라 동일한 논리함수가 체커보드, 대각선, 이중대각선 등 서로 다른 시각적
+        구조로 표현될 수 있다.
+      </p>
+
+      <h3 id="intro-obj">1.2 연구 목적</h3>
+      <p>
+        본 연구의 목적은 카르노맵에 나타나는 시각적 패턴을 체계적으로 분류하고, 이러한 패턴이
+        Boolean 함수의 구조와 어떠한 관계를 가지는지 탐구하는 데 있다.
+      </p>
+      <p>
+        Hamming Weight 관점을 도입하여 각 함수를 Boolean 공간의 Layer 구조로 해석하고,
+        카르노맵의 시각 패턴이 이러한 구조의 2차원 표현으로 이해될 수 있음을 규명하고자 한다.
+      </p>
+
+      <h3 id="intro-scope">1.3 연구 범위 및 방법</h3>
+      <p>
+        본 연구는 4변수 카르노맵(총 16개 입력 상태)을 대상으로 수행하였다.
+        완전대칭함수 중 Exactly-$k$ 함수와 XOR/XNOR 함수를 선정하고,
+        Gray Code 배열(0132)과 일반 이진 배열(0123)을 교차 비교하여 시각적 대칭, 동일, 체커보드, 이중대각, 고리 패턴의 5대 분류 체계를 수립하였다.
+      </p>
+    </section>
+
+    <!-- ── 2. Theory ── -->
+    <section id="theory">
+      <h2>2. 이론적 배경</h2>
+
+      <h3 id="theory-kmap">2.1 카르노맵의 구조</h3>
+      <p>
+        4변수 카르노맵은 총 16개의 셀로 구성되며, 각 셀은 입력 변수 $A, B, C, D$의 하나의 상태에 대응한다.
+        인접한 상태가 하나의 변수만 다르도록 배치되어 Boolean 공간의 인접성을 보존한다.
+      </p>
+
+      <figure class="academic-figure">
+        <img src="images/01.png" alt="그림 1. 4변수 카르노맵의 Gray Code 배열" />
+        <figcaption><strong>그림 1.</strong> 4변수 카르노맵에서 사용되는 Gray Code 배열(0132)의 구조. 인접한 셀이 항상 하나의 변수만 다르도록 배치되어 있으며, Boolean 공간의 인접성 구조를 보존한다.</figcaption>
+      </figure>
+
+      <h3 id="theory-gray">2.2 Gray Code 배열과 일반 이진 배열</h3>
+      <p>
+        4변수 카르노맵의 행과 열은 일반적으로 Gray Code 순서인 <code>00, 01, 11, 10</code>으로 배열된다.
+        이 배열 방식은 인접 상태 사이의 Hamming Distance가 항상 1이 된다는 성질을 가진다 (<strong>0132 배열</strong>).
+      </p>
+      <p>
+        반면 일반적인 이진수 순서인 <code>00, 01, 10, 11</code>을 <strong>0123 배열</strong>이라 부른다.
+        동일한 함수라도 표현 방식에 따라 인접성이 교란되며 서로 다른 시각 패턴이 나타난다.
+      </p>
+
+      <h3 id="theory-sym">2.3 완전대칭함수와 Hamming Weight</h3>
+      <p>
+        변수의 순서와 무관하게 동일한 출력을 유지하는 함수를 <strong>완전대칭함수(Symmetric Boolean Function)</strong>라 한다.
+        입력 상태의 Hamming Weight $w$는 다음과 같이 정의된다:
+      </p>
+      <p>$$w = A + B + C + D$$</p>
+      <p>
+        여기서 $w \in \{0, 1, 2, 3, 4\}$의 다섯 가지 값이 가능하며, 각 $w$에 해당하는 상태의 수는 조합 공식 $\binom{4}{w}$이다.
+      </p>
+
+      <h3 id="theory-layer">2.4 Boolean 공간의 Layer 구조</h3>
+      <p>
+        4변수 공간 16개 상태는 Hamming Weight에 따라 파스칼 삼각형 계수와 동일한 $1\text{-}4\text{-}6\text{-}4\text{-}1$ 층(Layer) 구조를 이룬다.
+      </p>
+
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>함수</th><th>선택 Layer</th><th>시각 패턴</th></tr></thead>
+          <thead><tr><th>Layer</th><th>Weight ($w$)</th><th>상태 수 $\binom{4}{w}$</th><th>해당 상태</th></tr></thead>
           <tbody>
-            <tr><td>Exactly-0</td><td>L₀</td><td>점 패턴</td></tr>
-            <tr><td>Exactly-1</td><td>L₁</td><td>모서리 패턴</td></tr>
-            <tr><td>Exactly-2</td><td>L₂</td><td>고리 패턴</td></tr>
-            <tr><td>Exactly-3</td><td>L₃</td><td>모서리 패턴</td></tr>
-            <tr><td>Exactly-4</td><td>L₄</td><td>점 패턴</td></tr>
-            <tr><td>XOR</td><td>L₁ ∪ L₃</td><td>체커보드 (0132) / 이중대각 (0123)</td></tr>
-            <tr><td>XNOR</td><td>L₀ ∪ L₂ ∪ L₄</td><td>체커보드 (0132) / 이중대각 (0123)</td></tr>
+            <tr><td><strong>$L_0$</strong></td><td>0</td><td>1</td><td>0000</td></tr>
+            <tr><td><strong>$L_1$</strong></td><td>1</td><td>4</td><td>0001, 0010, 0100, 1000</td></tr>
+            <tr><td><strong>$L_2$</strong></td><td>2</td><td>6</td><td>0011, 0101, 0110, 1001, 1010, 1100</td></tr>
+            <tr><td><strong>$L_3$</strong></td><td>3</td><td>4</td><td>0111, 1011, 1101, 1110</td></tr>
+            <tr><td><strong>$L_4$</strong></td><td>4</td><td>1</td><td>1111</td></tr>
           </tbody>
         </table>
       </div>
+
+      <figure class="academic-figure">
+        <img src="images/02.png" alt="그림 2. Boolean 공간의 Layer 구조" />
+        <figcaption><strong>그림 2.</strong> 4변수 Boolean 공간을 Hamming Weight에 따라 Layer로 분류한 결과. 각 Layer의 상태 수는 $1\text{-}4\text{-}6\text{-}4\text{-}1$ 구조를 이루며 파스칼 삼각형 계수와 대응된다.</figcaption>
+      </figure>
+
+      <h3 id="theory-relation">2.5 Layer 구조와 시각 패턴의 인과 체계</h3>
+      <p>완전대칭함수는 본질적으로 특정 Layer 또는 Layer 집합을 선택하는 함수이다.</p>
+      <div class="flow-box">
+        Boolean 함수 선택 &nbsp;⟶&nbsp; Layer 선택 ($L_k$) &nbsp;⟶&nbsp; Gray Code 배열 매핑 &nbsp;⟶&nbsp; 카르노맵 시각 패턴
+      </div>
+    </section>
+
+    <!-- ── 3. Pattern Definitions ── -->
+    <section id="patterns">
+      <h2>3. 시각 패턴의 정의</h2>
+
+      <h3>3.1 시각적 대칭 (Visual Symmetry) & 시각적 동일 (Visual Repetition)</h3>
+      <p>
+        <strong>시각적 대칭</strong>은 특정 축에 대하여 카르노맵을 반사하였을 때 대응되는 위치의 값이 유지되는 성질이며,
+        <strong>시각적 동일</strong>은 특정 부분 블록이 평행이동을 통해 반복적으로 나타나는 현상이다.
+      </p>
+
+      <h3>3.2 체커보드 패턴 vs 이중대각 패턴</h3>
+      <p>
+        <strong>체커보드 패턴</strong>은 인접한 모든 셀의 값이 반대가 되는 구조이며,
+        <strong>이중대각 패턴</strong>은 주대각선($y=x$)과 부대각선($y=-x$) 대칭을 동시에 가지는 격자 형태이다.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+        <div class="card" style="margin:0; padding:1.2rem;">
+          <b style="color:var(--accent); font-family:var(--font-mono);">체커보드 패턴 (Gray Code 0132)</b>
+          <pre style="margin-top:0.6rem;">0  1  0  1
+1  0  1  0
+0  1  0  1
+1  0  1  0</pre>
+        </div>
+        <div class="card" style="margin:0; padding:1.2rem;">
+          <b style="color:var(--accent); font-family:var(--font-mono);">이중대각 패턴 (일반 이진 0123)</b>
+          <pre style="margin-top:0.6rem;">0  1  1  0
+1  0  0  1
+1  0  0  1
+0  1  1  0</pre>
+        </div>
+      </div>
+
+      <h3>3.3 고리 패턴 (Ring Pattern)</h3>
+      <p>
+        Exactly-2 함수는 중앙 영역을 감싸는 6개 셀의 연속적 띠를 형성하며 폐곡선 고리 형태로 인식된다.
+      </p>
+    </section>
+
+    <!-- ── 4. Analysis ── -->
+    <section id="analysis">
+      <h2>4. 완전대칭함수의 시각 패턴 분석</h2>
+
+      <h3>4.1 Exactly-0 & Exactly-4 함수 — 점 패턴 (Point Pattern)</h3>
+      <p>
+        $L_0$ 및 $L_4$는 각각 1개 상태만을 가지며 카르노맵 모서리에 단일 점으로 나타난다.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <figure class="academic-figure">
+          <img src="images/03.png" alt="그림 3. Exactly-0 점 패턴" />
+          <figcaption><strong>그림 3.</strong> Exactly-0 함수의 카르노맵 표현. Weight = 0 상태만 선택되므로 단일 점(Point Pattern)으로 나타난다.</figcaption>
+        </figure>
+        <figure class="academic-figure">
+          <img src="images/07.png" alt="그림 7. Exactly-4 점 패턴" />
+          <figcaption><strong>그림 7.</strong> Exactly-4 함수의 카르노맵 표현. Weight = 4 상태만 선택되며 Exactly-0과 대척점에 위치한다.</figcaption>
+        </figure>
+      </div>
+
+      <h3>4.2 Exactly-1 & Exactly-3 함수 — 모서리 패턴 (Corner Pattern)</h3>
+      <p>
+        $L_1$ 및 $L_3$은 각각 4개 상태를 가지며, 4변수 카르노맵의 사방 모서리 방향으로 분산 배치되는 구조적 쌍대성을 가진다.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <figure class="academic-figure">
+          <img src="images/04.png" alt="그림 4. Exactly-1 모서리 패턴" />
+          <figcaption><strong>그림 4.</strong> Exactly-1 함수의 카르노맵 표현. Weight = 1 상태 4개가 모서리 방향으로 분산된다.</figcaption>
+        </figure>
+        <figure class="academic-figure">
+          <img src="images/06.png" alt="그림 6. Exactly-3 모서리 패턴" />
+          <figcaption><strong>그림 6.</strong> Exactly-3 함수의 카르노맵 표현. Weight = 3 상태 4개가 Exactly-1과 대응되는 모서리 패턴을 형성한다.</figcaption>
+        </figure>
+      </div>
+
+      <h3>4.3 Exactly-2 함수 — 고리 패턴 (Ring Pattern)</h3>
+      <p>
+        Boolean 공간의 최다 상태 Layer인 $L_2$ (6개 상태)는 Gray Code 위에서 닫힌 고리 형태의 기하학적 띠를 형성한다.
+      </p>
+
+      <figure class="academic-figure">
+        <img src="images/05.png" alt="그림 5. Exactly-2 고리 패턴" />
+        <figcaption><strong>그림 5.</strong> Exactly-2 함수의 카르노맵 표현. Weight = 2 상태 6개가 Gray Code 배열 위에서 연결된 띠를 이루며 고리 패턴(Ring Pattern)을 완성한다.</figcaption>
+      </figure>
+
+      <h3>4.4 XOR & XNOR 함수 — 체커보드 vs 이중대각 비교</h3>
+      <p>
+        XOR은 홀수 Layer ($L_1 \cup L_3$, 8개 셀), XNOR은 짝수 Layer ($L_0 \cup L_2 \cup L_4$, 8개 셀)를 선택한다.
+      </p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        <figure class="academic-figure">
+          <img src="images/08.png" alt="그림 8. XOR 체커보드 (0132)" />
+          <figcaption><strong>그림 8.</strong> Gray Code (0132) 배열에서의 XOR 체커보드 패턴.</figcaption>
+        </figure>
+        <figure class="academic-figure">
+          <img src="images/10.png" alt="그림 10. XOR 이중대각 (0123)" />
+          <figcaption><strong>그림 10.</strong> 일반 이진 (0123) 배열에서의 XOR 이중대각 패턴.</figcaption>
+        </figure>
+        <figure class="academic-figure">
+          <img src="images/09.png" alt="그림 9. XNOR 체커보드 (0132)" />
+          <figcaption><strong>그림 9.</strong> Gray Code (0132) 배열에서의 XNOR 체커보드 패턴.</figcaption>
+        </figure>
+        <figure class="academic-figure">
+          <img src="images/11.png" alt="그림 11. XNOR 이중대각 (0123)" />
+          <figcaption><strong>그림 11.</strong> 일반 이진 (0123) 배열에서의 XNOR 이중대각 패턴.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ── 5. Structural Interpretation ── -->
+    <section id="xor">
+      <h2>5. XOR/XNOR 패턴의 구조적 해석</h2>
+
+      <h3>5.1 패리티 구조와 인접 이동</h3>
+      <p>
+        4변수 XOR 함수는 $w$가 홀수인 상태의 합집합($L_1 \cup L_3$)이다.
+        카르노맵에서 한 셀 이동할 때 비트가 1개 바뀌므로 Hamming Weight는 반드시 $\pm 1$ 변화한다:
+      </p>
+      <p>$$L_0 \longleftrightarrow L_1 \longleftrightarrow L_2 \longleftrightarrow L_3 \longleftrightarrow L_4$$</p>
+      <p>
+        따라서 인접한 두 셀은 홀짝성이 반드시 반대이며, 홀수 Layer 선택 함수는 Gray Code 위에서 <strong>필연적으로 체커보드 패턴</strong>을 산출한다.
+      </p>
+
+      <figure class="academic-figure">
+        <img src="images/12.png" alt="그림 12. XOR 체커보드 생성 원리" />
+        <figcaption><strong>그림 12.</strong> XOR 함수의 체커보드 패턴 생성 과정. 홀수 Layer 선택 구조와 Gray Code 배열의 인접성 보존 성질이 결합되어 인접 셀 출력 반전이 발생하고, 그 결과 체커보드 패턴이 형성된다.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ── 6. Arrangement Comparison ── -->
+    <section id="arrangement">
+      <h2>6. 배열 방식에 따른 시각 패턴 변화</h2>
+
+      <h3>6.1 패턴 형성의 이중 원인 모형</h3>
+      <p>
+        본 연구의 분석은 시각 패턴이 단일 원인이 아닌 **함수의 성질(Layer 구조)**과 **표현의 성질(배열 방식)**의 상호작용임을 입증한다.
+      </p>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>결정 요소</th><th>결정 내용</th><th>성격</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Layer 구조</strong></td><td>어떤 상태가 선택되는가 ($L_k$)</td><td>Boolean 함수의 내재적 불변성</td></tr>
+            <tr><td><strong>배열 방식</strong></td><td>선택된 상태들이 평면에서 어떤 형태로 나타나는가 (0132 vs 0123)</td><td>인간 관찰 좌표계의 변환</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <figure class="academic-figure">
+        <img src="images/13.png" alt="그림 13. Layer 구조와 시각 패턴의 관계 모형" />
+        <figcaption><strong>그림 13.</strong> 본 연구에서 제안하는 해석 모형. Boolean 함수는 특정 Layer 구조를 결정하며, 배열 방식은 이를 시각적으로 표현한다. 인간이 관찰하는 시각 패턴은 두 요소의 상호작용 결과이다.</figcaption>
+      </figure>
+    </section>
+
+    <!-- ── 7. Conclusion ── -->
+    <section id="conclusion">
+      <h2>7. 결론 및 탐색적 가설</h2>
+      <div class="card" style="border-left: 5px solid var(--accent); background: var(--surface);">
+        <p style="font-family: var(--font-serif); font-size: 1.15rem; font-style: italic; margin-bottom: 0;">
+          "카르노맵의 주요 시각 패턴은 Boolean 공간의 Layer 구조가 특정 배열 방식 위에 투영된 결과이다."
+        </p>
+      </div>
+      <p>
+        본 연구는 점, 모서리, 고리, 체커보드 패턴이 개별적 우연이 아니라 <strong>파스칼 삼각형 Layer 구조와 인접성 보존 배열의 결합</strong>이라는 공통 원리로 통합 설명될 수 있음을 증명하였다.
+        이를 통해 카르노맵은 단순한 회로 간소화 도구를 넘어 고차원 Boolean 공간 구조를 탐색하는 시각 인지 도구로 재해석된다.
+      </p>
+    </section>
+
+    <!-- ── References ── -->
+    <section id="references">
+      <h2>참고문헌 (References)</h2>
+      <div class="card">
+        <ol style="padding-left: 1.5rem; font-size: 0.92rem; line-height: 1.8; color: var(--text-muted);">
+          <li>Karnaugh, M. (1953). "The Map Method for Synthesis of Combinational Logic Circuits." <em>Transactions of the AIEE</em>, 72(9), 593–599.</li>
+          <li>Veitch, E. W. (1952). "A Chart Method for Simplifying Truth Functions." <em>Proceedings of the ACM</em>, 127–133.</li>
+          <li>Gray, F. (1953). "Pulse Code Communication." U.S. Patent 2,632,058.</li>
+          <li>Roth, C. H. <em>Fundamentals of Logic Design</em>. Cengage Learning.</li>
+          <li>Mano, M. M. &amp; Ciletti, M. D. <em>Digital Design</em>. Pearson.</li>
+          <li>Hamming, R. W. (1950). "Error Detecting and Error Correcting Codes." <em>Bell System Technical Journal</em>, 29, 147–160.</li>
+          <li>Wegener, I. (1987). <em>The Complexity of Boolean Functions</em>. John Wiley &amp; Sons.</li>
+          <li>Crama, Y. &amp; Hammer, P. L. (2011). <em>Boolean Functions: Theory, Algorithms, and Applications</em>. Cambridge University Press.</li>
+          <li>Stanley, R. P. <em>Enumerative Combinatorics, Volume 1</em>. Cambridge University Press.</li>
+          <li>Knuth, D. E. <em>The Art of Computer Programming, Volume 4A</em>. Addison-Wesley.</li>
+        </ol>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Footer ── -->
+  <footer class="site-footer">
+    <div class="container">
+      <p><b>SymmetricBooleanFunctionMinorThesis</b> &nbsp;·&nbsp; Paper 2 of Structure Recognition Research Program</p>
+      <p style="margin-top: 0.5rem;">
+        저자: 최종훈 (Choi Jonghun) &nbsp;|&nbsp; 
+        <a href="https://github.com/inha20/2SymmetricBooleanFunctionMinorThesis" target="_blank" rel="noopener">GitHub</a> &nbsp;|&nbsp;
+        <a href="https://inha20.github.io/Research-Portfolio/">Research Portfolio</a>
+      </p>
     </div>
-  </section>
-
-  <!-- ── 1. Introduction ── -->
-  <section id="intro">
-    <h2>1. 서론</h2>
-
-    <h3 id="intro-bg">1.1 연구 배경</h3>
-    <p>
-      카르노맵은 디지털 논리회로 설계에서 논리식을 최소화하기 위한 대표적인 도구로 사용된다.
-      일반적인 교육 과정에서는 카르노맵의 인접 셀을 그룹화하여 SOP(Sum of Products) 또는
-      POS(Product of Sums) 형태의 최소 논리식을 도출하는 방법을 중심으로 설명한다.
-    </p>
-    <p>
-      그러나 실제 카르노맵을 관찰하면 단순한 그룹화 이상의 다양한 시각적 구조가 존재한다.
-      특히 XOR 및 XNOR 함수의 경우 일반적인 직사각형 그룹과는 다른 체커보드 형태의 패턴이 나타난다.
-      또한 배열 방식에 따라 동일한 논리함수가 체커보드, 대각선, 이중대각선 등 서로 다른 시각적
-      구조로 표현될 수 있다.
-    </p>
-    <p>
-      기존의 카르노맵 교육은 이러한 시각적 구조에 대한 설명보다는 최소화 절차에 집중하는 경향이 있으며,
-      XOR/XNOR 패턴 역시 예외적인 사례로 간단히 소개되거나 별도의 설명 없이 넘어가는 경우가 많다.
-      그 결과 학습자는 카르노맵을 단순 계산 도구로 인식하게 되며, 카르노맵이 내포하고 있는 구조적 의미를
-      충분히 이해하기 어렵다.
-    </p>
-
-    <h3 id="intro-obj">1.2 연구 목적</h3>
-    <p>
-      본 연구의 목적은 카르노맵에 나타나는 시각적 패턴을 체계적으로 분류하고, 이러한 패턴이
-      Boolean 함수의 구조와 어떠한 관계를 가지는지 탐구하는 데 있다.
-    </p>
-    <p>
-      특히 XOR/XNOR 함수에 나타나는 체커보드 패턴과 완전대칭함수에 나타나는 다양한 패턴을
-      비교 분석하여, 시각 패턴이 단순한 배열 결과가 아니라 함수의 구조적 특성을 반영하는 현상임을
-      확인하고자 한다.
-    </p>
-    <p>
-      또한 Hamming Weight 관점을 도입하여 각 함수를 Boolean 공간의 Layer 구조로 해석하고,
-      카르노맵의 시각 패턴이 이러한 구조의 2차원 표현으로 이해될 수 있음을 보이고자 한다.
-    </p>
-
-    <h3 id="intro-scope">1.3 연구 범위 및 방법</h3>
-    <p>
-      본 연구는 4변수 카르노맵을 대상으로 수행하였다. 4변수 카르노맵은 총 16개의 입력 상태를 포함하며,
-      XOR/XNOR 패턴과 다양한 대칭 구조를 가장 직관적으로 관찰할 수 있는 규모이다.
-    </p>
-    <p>연구 방법은 다음과 같다.</p>
-    <p>
-      첫째, 완전대칭함수 중 Exactly-k 함수와 XOR/XNOR 함수를 선정하여 카르노맵 패턴을 분석하였다.
-      둘째, Gray Code 배열(0132)과 일반 이진 배열(0123)을 각각 적용하여 표현 방식에 따른 패턴 변화를
-      비교하였다. 셋째, Hamming Weight를 기준으로 Boolean 공간을 Layer 구조로 분류하고, 각 함수가
-      선택하는 Layer와 카르노맵 패턴 사이의 관계를 분석하였다. 넷째, 시각적 대칭, 시각적 동일,
-      체커보드 패턴, 이중대각 패턴 등의 개념을 정의하고 이를 이용하여 패턴을 분류하였다.
-    </p>
-  </section>
-
-  <!-- ── 2. Theory ── -->
-  <section id="theory">
-    <h2>2. 이론적 배경</h2>
-
-    <h3 id="theory-kmap">2.1 카르노맵의 구조</h3>
-    <p>
-      카르노맵은 Boolean 함수를 시각적으로 표현하여 논리식의 최소화를 수행하기 위한 도구이다.
-      4변수 카르노맵은 총 16개의 셀로 구성되며, 각 셀은 입력 변수 $A, B, C, D$의 하나의 상태에 대응한다.
-    </p>
-    <p>
-      일반적인 진리표는 이진수 순서에 따라 상태를 배열하지만, 카르노맵은 인접한 상태가 하나의 변수만
-      다르도록 배치된다. 이를 통해 인접 셀을 그룹화하여 논리식을 간단하게 표현할 수 있다.
-    </p>
-    <p>
-      본 연구에서는 카르노맵을 Boolean 공간의 2차원 표현으로 간주하고, 그 위에 나타나는 시각 패턴을
-      분석 대상으로 삼는다.
-    </p>
-
-    <figure>
-      <img src="images/01.png" alt="그림 1. 4변수 카르노맵의 Gray Code 배열" />
-      <figcaption><strong>그림 1.</strong> 4변수 카르노맵에서 사용되는 Gray Code 배열(0132)의 구조. 인접한 셀이 항상 하나의 변수만 다르도록 배치되어 있으며, Boolean 공간의 인접성 구조를 보존한다.</figcaption>
-    </figure>
-
-    <h3 id="theory-gray">2.2 Gray Code 배열과 일반 이진 배열</h3>
-    <p>
-      4변수 카르노맵의 행과 열은 일반적으로 Gray Code 순서인 <code>00, 01, 11, 10</code>으로 배열된다.
-      이 배열 방식은 인접한 두 상태가 정확히 하나의 비트만 다르도록 설계되어 있으며, 인접 상태 사이의
-      Hamming Distance가 항상 1이 된다는 성질을 가진다. 본 연구에서는 이를 <strong>0132 배열</strong>이라 부른다.
-    </p>
-    <p>
-      반면 일반적인 이진수 순서인 <code>00, 01, 10, 11</code>을 <strong>0123 배열</strong>이라 부른다.
-      동일한 Boolean 함수라도 배열 방식에 따라 서로 다른 시각 패턴이 나타날 수 있다.
-    </p>
-
-    <h3 id="theory-sym">2.3 완전대칭함수와 Hamming Weight</h3>
-    <p>
-      Boolean 함수가 변수의 순서와 무관하게 동일한 출력을 유지하는 경우 이를
-      <strong>완전대칭함수(Symmetric Boolean Function)</strong>라 한다. 완전대칭함수는 각 변수의 위치보다
-      입력에 포함된 1의 개수에 의해 출력이 결정되는 경우가 많다.
-    </p>
-    <p>본 연구에서는 입력 상태의 Hamming Weight를 다음과 같이 정의한다.</p>
-    <p>$$w = A + B + C + D$$</p>
-    <p>
-      여기서 $w$는 입력 상태에 포함된 1의 개수를 의미한다. 4변수 Boolean 공간에서는
-      $w \in \{0, 1, 2, 3, 4\}$의 다섯 가지 값이 가능하며, 각 $w$에 해당하는 상태의 수는
-      $\binom{4}{w}$이다.
-    </p>
-
-    <h3 id="theory-layer">2.4 Boolean 공간의 Layer 구조</h3>
-    <p>
-      4변수 Boolean 공간은 총 16개의 상태로 구성된다. 본 연구에서는 이 공간을 Hamming Weight를
-      기준으로 다섯 개의 Layer로 분류한다.
-    </p>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Layer</th><th>Weight ($w$)</th><th>상태 수 $\binom{4}{w}$</th></tr></thead>
-        <tbody>
-          <tr><td>$L_0$</td><td>0</td><td>1</td></tr>
-          <tr><td>$L_1$</td><td>1</td><td>4</td></tr>
-          <tr><td>$L_2$</td><td>2</td><td>6</td></tr>
-          <tr><td>$L_3$</td><td>3</td><td>4</td></tr>
-          <tr><td>$L_4$</td><td>4</td><td>1</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p>
-      <strong>표 1.</strong> 4변수 Boolean 공간의 Layer 구조. 각 층의 상태 수는 $1\text{-}4\text{-}6\text{-}4\text{-}1$ 구조를
-      이루며, 이는 파스칼 삼각형의 계수와 대응된다.
-    </p>
-
-    <figure>
-      <img src="images/02.png" alt="그림 2. Boolean 공간의 Layer 구조" />
-      <figcaption><strong>그림 2.</strong> 4변수 Boolean 공간을 Hamming Weight에 따라 Layer로 분류한 결과. 각 Layer의 상태 수는 $1\text{-}4\text{-}6\text{-}4\text{-}1$ 구조를 이루며 파스칼 삼각형 계수와 대응된다.</figcaption>
-    </figure>
-
-    <h3 id="theory-relation">2.5 Layer 구조와 시각 패턴</h3>
-    <p>완전대칭함수는 특정 Layer 또는 Layer 집합을 선택하는 함수로 이해할 수 있다.</p>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>함수</th><th>선택 Layer</th></tr></thead>
-        <tbody>
-          <tr><td>Exactly-$k$</td><td>$L_k$</td></tr>
-          <tr><td>XOR</td><td>$L_1 \cup L_3$</td></tr>
-          <tr><td>XNOR</td><td>$L_0 \cup L_2 \cup L_4$</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p>이러한 관점에서 카르노맵의 시각 패턴은 Layer 선택 결과의 2차원 표현으로 해석할 수 있다.</p>
-    <div class="flow">
-      Boolean 함수 &xrarr; Layer 선택 &xrarr; Layer 구조 &xrarr; 배열 방식 &xrarr; 시각 패턴
-    </div>
-  </section>
-
-  <!-- ── 3. Pattern Definitions ── -->
-  <section id="patterns">
-    <h2>3. 시각 패턴의 정의</h2>
-
-    <h3>3.1 시각적 대칭</h3>
-    <p>
-      <strong>시각적 대칭(Visual Symmetry)</strong>이란 특정 축에 대하여 카르노맵을 반사하였을 때
-      대응되는 위치의 값이 동일하게 유지되는 성질이다.
-    </p>
-
-    <h3>3.2 시각적 동일</h3>
-    <p>
-      <strong>시각적 동일(Visual Repetition)</strong>은 특정 부분 패턴이 반복적으로 나타나는 현상이다.
-      시각적 대칭이 반사 관계를 의미한다면, 시각적 동일은 반복 관계를 의미한다.
-    </p>
-
-    <h3>3.3 체커보드 패턴</h3>
-    <p>
-      <strong>체커보드 패턴(Checkerboard Pattern)</strong>은 인접한 셀의 값이 항상 서로 반대가 되는 패턴이다.
-    </p>
-    <pre>0 1 0 1
-1 0 1 0
-0 1 0 1
-1 0 1 0</pre>
-    <p>Gray Code 배열에서는 인접 셀이 정확히 하나의 변수만 다르므로, XOR 함수의 경우 인접 셀 이동 시 출력이 반드시 반전된다.</p>
-
-    <h3>3.4 이중대각 패턴</h3>
-    <p>일반 이진 배열(0123)에서 XOR 함수를 표현하면 다음과 같은 패턴이 나타난다.</p>
-    <pre>0 1 1 0
-1 0 0 1
-1 0 0 1
-0 1 1 0</pre>
-    <p>
-      이 패턴은 주대각선과 부대각선 모두에 대한 대칭성을 동시에 가진다.
-      본 연구에서는 이를 <strong>이중대각 패턴(Double-Diagonal Pattern)</strong>이라 정의한다.
-    </p>
-
-    <h3>3.5 고리 패턴</h3>
-    <p>
-      Exactly-2 함수는 Weight가 정확히 2인 상태만 선택한다. 이를 Gray Code 기반 0132 배열에 배치하면
-      선택된 상태들이 중심 영역을 둘러싸는 띠(band) 형태의 연결 구조를 형성한다. 본 연구에서는 이를
-      <strong>고리 패턴(Ring Pattern)</strong>이라 정의한다.
-    </p>
-
-    <h3>3.6 시각 패턴 분류 체계</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>패턴</th><th>대표 함수</th><th>선택 Layer</th></tr></thead>
-        <tbody>
-          <tr><td>점 패턴 (Point Pattern)</td><td>Exactly-0, Exactly-4</td><td>$L_0$, $L_4$</td></tr>
-          <tr><td>모서리 패턴 (Corner Pattern)</td><td>Exactly-1, Exactly-3</td><td>$L_1$, $L_3$</td></tr>
-          <tr><td>고리 패턴 (Ring Pattern)</td><td>Exactly-2</td><td>$L_2$</td></tr>
-          <tr><td>체커보드 패턴 (0132 배열)</td><td>XOR, XNOR</td><td>$L_1 \cup L_3$, $L_0 \cup L_2 \cup L_4$</td></tr>
-          <tr><td>이중대각 패턴 (0123 배열)</td><td>XOR, XNOR</td><td>$L_1 \cup L_3$, $L_0 \cup L_2 \cup L_4$</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p><strong>표 2.</strong> 카르노맵에 나타나는 시각 패턴 분류 체계.</p>
-  </section>
-
-  <!-- ── 4. Analysis ── -->
-  <section id="analysis">
-    <h2>4. 완전대칭함수의 시각 패턴 분석</h2>
-
-    <h3>4.1 분석 대상</h3>
-    <p>
-      본 연구에서는 Hamming Weight만으로 출력이 결정되는 다음 완전대칭함수들을 분석 대상으로 선정하였다:
-      Exactly-0, Exactly-1, Exactly-2, Exactly-3, Exactly-4, XOR, XNOR.
-    </p>
-
-    <h3>4.2 Exactly-0 함수 — 점 패턴</h3>
-    <p>
-      Exactly-0 함수는 모든 입력이 0인 경우에만 출력이 1이 된다. 즉 $L_0$만을 선택하는 함수이다.
-      선택되는 상태는 단 하나뿐이므로 카르노맵에서는 하나의 점으로 표현된다.
-    </p>
-    <figure>
-      <img src="images/03.png" alt="그림 3. Exactly-0 점 패턴" />
-      <figcaption><strong>그림 3.</strong> Exactly-0 함수의 카르노맵 표현. Weight = 0 상태만 선택되므로 하나의 점(Point Pattern)으로 나타난다.</figcaption>
-    </figure>
-
-    <h3>4.3 Exactly-1 함수 — 모서리 패턴</h3>
-    <p>
-      Exactly-1 함수는 입력 중 정확히 하나만 1인 경우 출력이 1이 된다. 즉 $L_1$을 선택하는 함수이다.
-      Weight = 1 상태는 총 4개 존재하며 카르노맵에서는 서로 떨어진 위치에 배치된다.
-      그 결과 네 개의 점이 모서리 방향으로 분산된 구조가 나타난다.
-    </p>
-    <figure>
-      <img src="images/04.png" alt="그림 4. Exactly-1 모서리 패턴" />
-      <figcaption><strong>그림 4.</strong> Exactly-1 함수의 카르노맵 표현. Weight = 1 상태 네 개가 선택되며 모서리 방향으로 분산된 구조를 형성한다.</figcaption>
-    </figure>
-
-    <h3>4.4 Exactly-2 함수 — 고리 패턴</h3>
-    <p>
-      Exactly-2 함수는 Weight가 정확히 2인 상태만 선택한다. 즉 $L_2$를 선택하는 함수이다.
-      Weight = 2 상태는 총 6개 존재하며 4변수 Boolean 공간에서 가장 큰 Layer를 형성한다
-      $\bigl(\binom{4}{2} = 6\bigr)$.
-    </p>
-    <p>
-      이를 0132 배열에 배치하면 선택된 셀들이 연결된 띠 형태를 형성하며,
-      인간은 이를 하나의 폐곡선 또는 고리와 유사한 형태로 인식한다.
-    </p>
-    <figure>
-      <img src="images/05.png" alt="그림 5. Exactly-2 고리 패턴" />
-      <figcaption><strong>그림 5.</strong> Exactly-2 함수의 카르노맵 표현. Weight = 2 상태 여섯 개가 Gray Code 배열 위에서 연결된 띠 형태를 형성하며, 시각적으로 고리(Ring Pattern)에 가까운 구조로 인식된다.</figcaption>
-    </figure>
-
-    <h3>4.5 Exactly-3 함수 — 모서리 패턴</h3>
-    <p>
-      Exactly-3 함수는 $L_3$을 선택한다. Weight = 3 상태의 수는 $\binom{4}{3} = 4$로 Weight = 1 상태의 수와
-      동일하다. 카르노맵에서는 Exactly-1과 동일한 시각 구조를 형성한다.
-    </p>
-    <figure>
-      <img src="images/06.png" alt="그림 6. Exactly-3 모서리 패턴" />
-      <figcaption><strong>그림 6.</strong> Exactly-3 함수의 카르노맵 표현. Weight = 3 상태가 선택되며 Exactly-1과 대응되는 모서리 패턴을 형성한다.</figcaption>
-    </figure>
-
-    <h3>4.6 Exactly-4 함수 — 점 패턴</h3>
-    <p>
-      Exactly-4 함수는 모든 입력이 1인 경우에만 출력이 1이 된다. 즉 $L_4$만을 선택한다.
-      선택되는 상태는 1개이며 Exactly-0과 마찬가지로 점 패턴을 형성한다.
-      Exactly-0과 Exactly-4는 Boolean 공간의 양 끝 Layer에 해당하는 구조적 대응 관계를 가진다.
-    </p>
-    <figure>
-      <img src="images/07.png" alt="그림 7. Exactly-4 점 패턴" />
-      <figcaption><strong>그림 7.</strong> Exactly-4 함수의 카르노맵 표현. Weight = 4 상태만 선택되며 Exactly-0과 대응되는 점 패턴을 형성한다.</figcaption>
-    </figure>
-
-    <h3>4.7 XOR 함수</h3>
-    <p>
-      XOR 함수는 Weight가 홀수인 상태에서 출력이 1이 된다. 즉 $L_1 \cup L_3$을 선택한다.
-    </p>
-    <figure>
-      <img src="images/08.png" alt="그림 8. XOR 체커보드 (0132)" />
-      <figcaption><strong>그림 8.</strong> Gray Code 배열에서 표현한 XOR 함수. 인접한 셀의 값이 항상 반대가 되므로 체커보드 패턴이 형성된다.</figcaption>
-    </figure>
-    <figure>
-      <img src="images/10.png" alt="그림 10. XOR 이중대각 (0123)" />
-      <figcaption><strong>그림 10.</strong> 일반 이진 배열(0123)에서 표현한 XOR 함수. 체커보드 구조는 사라지며 이중대각 패턴이 나타난다.</figcaption>
-    </figure>
-
-    <h3>4.8 XNOR 함수</h3>
-    <p>
-      XNOR 함수는 Weight가 짝수인 상태에서 출력이 1이 된다. 즉 $L_0 \cup L_2 \cup L_4$를 선택한다.
-      이는 XOR 함수의 보수 구조에 해당한다.
-    </p>
-    <figure>
-      <img src="images/09.png" alt="그림 9. XNOR 체커보드 (0132)" />
-      <figcaption><strong>그림 9.</strong> Gray Code 배열에서 표현한 XNOR 함수. XOR 체커보드의 보수 구조에 해당한다.</figcaption>
-    </figure>
-    <figure>
-      <img src="images/11.png" alt="그림 11. XNOR 이중대각 (0123)" />
-      <figcaption><strong>그림 11.</strong> 일반 이진 배열에서 표현한 XNOR 함수. XOR의 보수 구조로 나타나는 이중대각 패턴이다.</figcaption>
-    </figure>
-
-    <h3>4.9 분석 결과 요약</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>함수</th><th>선택 Layer</th><th>상태 수</th><th>시각 패턴</th></tr></thead>
-        <tbody>
-          <tr><td>Exactly-0</td><td>$L_0$</td><td>1</td><td>점 패턴</td></tr>
-          <tr><td>Exactly-1</td><td>$L_1$</td><td>4</td><td>모서리 패턴</td></tr>
-          <tr><td>Exactly-2</td><td>$L_2$</td><td>6</td><td>고리 패턴</td></tr>
-          <tr><td>Exactly-3</td><td>$L_3$</td><td>4</td><td>모서리 패턴</td></tr>
-          <tr><td>Exactly-4</td><td>$L_4$</td><td>1</td><td>점 패턴</td></tr>
-          <tr><td>XOR</td><td>$L_1 \cup L_3$</td><td>8</td><td>체커보드 / 이중대각</td></tr>
-          <tr><td>XNOR</td><td>$L_0 \cup L_2 \cup L_4$</td><td>8</td><td>체커보드 / 이중대각</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p><strong>표 3.</strong> 4변수 완전대칭함수의 시각 패턴 분류 결과.</p>
-  </section>
-
-  <!-- ── 5. XOR/XNOR Structural Interpretation ── -->
-  <section id="xor">
-    <h2>5. XOR/XNOR 패턴의 구조적 해석</h2>
-
-    <h3>5.1 XOR 함수와 Layer 구조</h3>
-    <p>4변수 XOR 함수는 다음과 같이 정의된다.</p>
-    <p>$$A \oplus B \oplus C \oplus D = 1 \iff w \text{ 가 홀수}$$</p>
-    <p>따라서 XOR 함수는 $L_1 \cup L_3$을 선택하는 함수로 해석할 수 있다.</p>
-
-    <h3>5.2 Gray Code 배열의 인접성 보존</h3>
-    <p>
-      4변수 카르노맵의 행과 열은 <code>00, 01, 11, 10</code>의 순서로 배열된다.
-      이 배열의 핵심 성질은 <strong>인접한 두 상태가 정확히 하나의 비트만 다르다</strong>는 점이다.
-      즉 인접 상태 사이의 Hamming Distance는 항상 1이다.
-      본 연구에서는 이를 <strong>Gray Code 배열의 인접성 보존 성질</strong>이라 부른다.
-    </p>
-
-    <h3>5.3 인접 이동과 Weight 변화</h3>
-    <p>Boolean 공간에서 하나의 비트가 변경되면 Hamming Weight는 반드시 1만큼 증가하거나 감소한다.</p>
-    <p>$$L_0 \leftrightarrow L_1 \leftrightarrow L_2 \leftrightarrow L_3 \leftrightarrow L_4$$</p>
-    <p>따라서 카르노맵에서 인접한 두 셀은 항상 Weight의 홀짝성이 반대이다.</p>
-
-    <h3>5.4 XOR 체커보드 패턴의 형성</h3>
-    <div class="flow">
-      XOR &rArr; L₁ ∪ L₃ &rArr; Gray Code 인접성 &rArr; 인접 셀 출력 반전 &rArr; 체커보드 패턴
-    </div>
-    <p>
-      따라서 체커보드 패턴은 단순한 시각적 우연이 아니라 Boolean 공간의 구조가 2차원 카르노맵 위에
-      표현된 <strong>구조적 결과</strong>이다.
-    </p>
-    <figure>
-      <img src="images/12.png" alt="그림 12. XOR 체커보드 생성 원리" />
-      <figcaption><strong>그림 12.</strong> XOR 함수의 체커보드 패턴 생성 과정. 홀수 Layer 선택 구조와 Gray Code 배열의 인접성 보존 성질이 결합되어 인접 셀 출력 반전이 발생하고, 그 결과 체커보드 패턴이 형성된다.</figcaption>
-    </figure>
-
-    <h3>5.5 XNOR 함수의 해석</h3>
-    <p>
-      XNOR 함수는 XOR 함수의 보수로서 $L_0 \cup L_2 \cup L_4$를 선택한다.
-      짝수 Weight 층만을 선택하므로 마찬가지로 인접 셀 간 출력이 항상 반전된다.
-      따라서 XNOR 역시 Gray Code 배열에서 체커보드 패턴을 형성하며,
-      이는 XOR 체커보드의 반전 형태로 이해할 수 있다.
-    </p>
-
-    <h3>5.6 체커보드 패턴의 구조적 의미</h3>
-    <p>
-      체커보드 패턴은 완전대칭함수의 일반적 특징이 아니다. Exactly-k 함수들은 체커보드를 형성하지 않는다.
-      체커보드는 <strong>홀수 Layer 전체 또는 짝수 Layer 전체를 선택하는 패리티(parity) 구조</strong>에서만
-      나타나는 특수한 현상이다.
-    </p>
-  </section>
-
-  <!-- ── 6. Arrangement Comparison ── -->
-  <section id="arrangement">
-    <h2>6. 배열 방식에 따른 시각 패턴 변화</h2>
-
-    <h3>6.1 동일한 함수와 서로 다른 패턴</h3>
-    <p>
-      카르노맵의 시각 패턴은 함수 자체에 의해서만 결정되지 않는다.
-      동일한 Boolean 함수라도 배열 방식에 따라 서로 다른 시각 구조가 나타날 수 있다.
-    </p>
-
-    <h3>6.2 XOR 함수의 경우</h3>
-    <p>
-      XOR 함수는 항상 $L_1 \cup L_3$을 선택한다. Layer 구조는 배열 방식과 무관하게 동일하다.
-      그러나 시각적 표현은 다음과 같이 달라진다.
-    </p>
-    <p>
-      <strong>0132 배열:</strong> Gray Code의 인접성 보존 성질에 의해 체커보드 패턴이 형성된다.<br />
-      <strong>0123 배열:</strong> 인접성이 Boolean 공간의 인접성과 일치하지 않아 체커보드 구조가 사라진다.
-      대신 XOR 함수의 대칭 구조가 두드러지며 이중대각 패턴이 나타난다.
-    </p>
-
-    <h3>6.3 패턴 형성의 이중 원인</h3>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>요소</th><th>결정 내용</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Layer 구조</strong> (함수의 성질)</td><td>어떤 상태가 선택되는가</td></tr>
-          <tr><td><strong>배열 방식</strong> (표현의 성질)</td><td>선택된 상태들이 평면에서 어떤 형태로 나타나는가</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p>
-      따라서 <strong>패턴의 근본 원인은 Layer 구조</strong>에 있지만,
-      <strong>인간이 관찰하는 구체적 형태는 배열 방식</strong>에 의해 결정된다.
-    </p>
-
-    <h3>6.4 Gray Code 배열의 역할</h3>
-    <p>
-      Gray Code 배열은 논리식 최소화를 위해 설계된 배열이지만, 본 연구 결과는 그 이상의 역할을 수행할
-      가능성을 시사한다. Gray Code 배열은 Boolean 공간의 인접성 구조를 보존함으로써 Layer 구조에 포함된
-      상태들의 관계를 시각적으로 드러내기 쉽게 만든다.
-    </p>
-    <p>
-      따라서 <strong>Gray Code 배열은 Boolean 공간 구조를 시각적으로 표현하는 역할도 수행할 가능성</strong>이 있다.
-    </p>
-  </section>
-
-  <!-- ── 7. Conclusion ── -->
-  <section id="conclusion">
-    <h2>7. 결론</h2>
-    <p>
-      본 연구에서는 4변수 카르노맵에 나타나는 완전대칭함수의 시각 패턴을 분석하고,
-      이러한 패턴이 Boolean 공간의 Layer 구조와 어떠한 관계를 가지는지 탐구하였다.
-    </p>
-    <p>
-      분석 결과 완전대칭함수의 시각 패턴은 해당 함수가 선택하는 Layer 구조와 직접적으로 대응됨을 확인하였다.
-      Exactly-0/4는 점 패턴, Exactly-1/3은 모서리 패턴, Exactly-2는 고리 패턴을 형성하며,
-      XOR/XNOR은 배열 방식에 따라 체커보드 또는 이중대각 패턴으로 표현된다.
-    </p>
-    <p>
-      특히 XOR 체커보드 패턴은 단순한 시각적 우연이 아니라
-      <strong>홀수 Layer 선택 구조와 Gray Code 배열의 인접성 보존 성질이 결합되어 형성되는 구조적 결과</strong>임을
-      확인하였다.
-    </p>
-    <p>
-      본 연구는 다음과 같은 탐색적 가설을 제안한다.
-    </p>
-    <blockquote style="border-left:4px solid var(--accent);padding:.8rem 1.2rem;margin:1.2rem 0;background:var(--accent-light);font-style:italic;">
-      카르노맵의 주요 시각 패턴은 Boolean 공간의 Layer 구조가 특정 배열 방식 위에 투영된 결과일 수 있다.
-    </blockquote>
-    <p>
-      만약 이 가설이 타당하다면, 점 패턴, 모서리 패턴, 고리 패턴, 체커보드 패턴 등은 서로 독립적인 현상이 아니라
-      하나의 공통 원리로 설명될 수 있다. 즉 카르노맵은 단순한 논리 최소화 도구를 넘어 Boolean 공간의 구조를
-      시각적으로 표현하는 도구로 재해석될 수 있다.
-    </p>
-    <figure>
-      <img src="images/13.png" alt="그림 13. Layer 구조와 시각 패턴의 관계 모형" />
-      <figcaption><strong>그림 13.</strong> 본 연구에서 제안하는 해석 모형. Boolean 함수는 특정 Layer 구조를 결정하며, 배열 방식은 이를 시각적으로 표현한다. 인간이 관찰하는 시각 패턴은 두 요소의 상호작용 결과로 해석할 수 있다.</figcaption>
-    </figure>
-    <p>
-      향후 연구에서는 변수 재배열에 따른 구조 불변성, 5변수 이상의 Boolean 공간에 대한 Layer 분석,
-      그리고 인간의 시각적 구조 인식 과정과의 관계 등을 탐구할 필요가 있다.
-    </p>
-  </section>
-
-  <!-- ── References ── -->
-  <section id="references" class="references">
-    <h2>참고문헌</h2>
-    <ol>
-      <li>Karnaugh, M. (1953). "The Map Method for Synthesis of Combinational Logic Circuits." <em>Transactions of the American Institute of Electrical Engineers</em>, 72(9), 593–599.</li>
-      <li>Veitch, E. W. (1952). "A Chart Method for Simplifying Truth Functions." <em>Proceedings of the ACM</em>, 127–133.</li>
-      <li>Gray, F. (1953). "Pulse Code Communication." U.S. Patent 2,632,058.</li>
-      <li>Roth, C. H. <em>Fundamentals of Logic Design</em>. Cengage Learning.</li>
-      <li>Mano, M. M. &amp; Ciletti, M. D. <em>Digital Design</em>. Pearson.</li>
-      <li>Hamming, R. W. (1950). "Error Detecting and Error Correcting Codes." <em>Bell System Technical Journal</em>, 29, 147–160.</li>
-      <li>Wegener, I. (1987). <em>The Complexity of Boolean Functions</em>. John Wiley &amp; Sons.</li>
-      <li>Crama, Y. &amp; Hammer, P. L. (2011). <em>Boolean Functions: Theory, Algorithms, and Applications</em>. Cambridge University Press.</li>
-      <li>Stanley, R. P. <em>Enumerative Combinatorics, Volume 1</em>. Cambridge University Press.</li>
-      <li>Knuth, D. E. <em>The Art of Computer Programming, Volume 4A</em>. Addison-Wesley.</li>
-    </ol>
-  </section>
-
-  <footer>
-    <p>
-      SymmetricBooleanFunctionMinorThesis &nbsp;|&nbsp;
-      <a href="https://github.com/inha20/2SymmetricBooleanFunctionMinorThesis">GitHub</a>
-    </p>
-    <p style="margin-top:.4rem;">
-      본 논문에서 제안한 분류 체계와 Layer 기반 시각 패턴 해석은 저자의 분석 결과에 기반한 탐색적 해석입니다.
-    </p>
   </footer>
 
-</div>
+  <!-- ── Lightbox Modal ── -->
+  <div id="lightboxModal" class="lightbox-modal">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightboxImg" src="" alt="확대 도판" />
+  </div>
+
+  <!-- ── Toast ── -->
+  <div id="toast" class="toast">
+    <span>✓ BibTeX 인용 정보가 복사되었습니다!</span>
+  </div>
+
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const htmlEl = document.documentElement;
+
+    const moonPath = "M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z";
+    const sunPath = "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z";
+
+    function setTheme(theme) {
+      htmlEl.setAttribute('data-theme', theme);
+      localStorage.setItem('sbf_theme', theme);
+      if (theme === 'dark') {
+        themeIcon.innerHTML = `<path d="${sunPath}"></path>`;
+      } else {
+        themeIcon.innerHTML = `<path d="${moonPath}"></path>`;
+      }
+    }
+
+    const savedTheme = localStorage.getItem('sbf_theme') || 'light';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // Lightbox
+    const modal = document.getElementById('lightboxModal');
+    const modalImg = document.getElementById('lightboxImg');
+    document.querySelectorAll('.academic-figure img').forEach(img => {
+      img.addEventListener('click', () => {
+        modalImg.src = img.src;
+        modal.classList.add('active');
+      });
+    });
+    modal.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    // BibTeX Copy
+    const citeBtn = document.getElementById('citeBtn');
+    const toast = document.getElementById('toast');
+    const bibtex = `@article{choi2026symmetric,
+  author = {Choi, Jonghun},
+  title = {A Study on the Correspondence Between Visual Patterns of Karnaugh Maps and Boolean Space Structures},
+  year = {2026},
+  journal = {Structure Recognition Research Program - Minor Thesis 2},
+  url = {https://github.com/inha20/2SymmetricBooleanFunctionMinorThesis}
+}`;
+
+    citeBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(bibtex).then(() => {
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      });
+    });
+  </script>
 </body>
 </html>
