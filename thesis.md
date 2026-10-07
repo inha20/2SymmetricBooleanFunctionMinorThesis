@@ -397,7 +397,7 @@ Gray Code 배열은 논리식 최소화를 위해 설계된 배열이지만, 본
 
 ## 참고문헌
 
-[1] Karnaugh, M. (1953). "The Map Method for Synthesis of Combinational Logic Circuits." *Transactions of the American Institute of Electrical Engineers, Part I: Communication and Electronics*, 72(9), 593–599.
+[1] Karnaugh, M. (1953). "The Map Method for Synthesis of Combinational Logic Circuits." *Transactions of the American Institute of Electrical Engineers, Part I: Communication and Electronics*, 72(5), 593–599.
 
 [2] Veitch, E. W. (1952). "A Chart Method for Simplifying Truth Functions." *Proceedings of the ACM*, 127–133.
 
