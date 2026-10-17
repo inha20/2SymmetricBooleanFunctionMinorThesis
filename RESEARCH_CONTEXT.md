@@ -152,17 +152,11 @@ Humans and AI may possess complementary memory structures.
 
 ## Externalized Project Memory
 
-This repository contains several documents designed to preserve project state across AI sessions.
+Earlier versions of this repository kept several hand-over and checklist documents designed to preserve project state across AI sessions. They have since been consolidated and removed; project state is now tracked at the program level in the single AI entry point, [SESSION_START.md](https://github.com/inha20/inha20/blob/main/SESSION_START.md).
 
-Examples:
+These documents functioned as externalized project memory.
 
-- AI_HANDOVER.md
-- NEXT_STEPS.md
-- CLEANUP_CHECKLIST.md
-
-These documents function as externalized project memory.
-
-They reduce context reconstruction costs and help future AI assistants continue work efficiently.
+They reduced context reconstruction costs and helped future AI assistants continue work efficiently.
 
 This repository therefore serves not only as a research repository but also as an experimental example of AI-assisted research management.
 
@@ -217,13 +211,13 @@ Paper 4: Structure Recognition Theory  (이론적 허브)
 
 | Paper 2의 관찰 | SRT 가설과의 연결 |
 |---|---|
-| Hamming Weight 계산 전에 패턴이 먼저 인식됨 | H1 (Structure Discoverer), H2 (Representation Transformation) |
+| Hamming Weight 계산 전에 패턴이 먼저 인식됨 (저자의 주관적 인상이며, 관찰·실험 자료는 없음) | H1 (Structure Discoverer), H2 (Representation Transformation) |
 | Weight Layer 프레임워크가 링/점 구조를 드러냄 | H2 (표현 방식이 구조 가시성을 결정) |
 | Exactly-k 함수가 특징적 패턴을 생성함 | H5 (설명 기대: "왜 이 패턴이 항상 나타나는가?") |
 
 ### 프로그램 핵심 문서 바로가기
-- [MasterHandoverDocument](../Research-Portfolio-main/ProjectManagement/MasterHandoverDocument.md)
-- [ResearchProgramArchitecture](../Research-Portfolio-main/ProjectManagement/ResearchProgramArchitecture.md)
-- [Structure Recognition Theory v0.1](../4StructureRecognitionTheory-main/theory/StructureRecognitionTheory_v0.1.md)
+- [MasterHandoverDocument → SESSION_START.md](../inha20/SESSION_START.md)
+- [ResearchProgramArchitecture → SESSION_START.md](../inha20/SESSION_START.md)
+- [Structure Recognition Theory (Unified)](../inha20/StructureRecognitionTheory_Unified.md)
 
 *아키텍처 교차 참조 최종 갱신: 2026-06-05*

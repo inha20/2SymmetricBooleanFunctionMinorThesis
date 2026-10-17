@@ -38,7 +38,7 @@ This paper provides key empirical observations for Structure Recognition Theory 
 
 ## 보기
 
-- **GitHub Pages:** [논문 온라인 보기](https://cjh3c.github.io/2SymmetricBooleanFunctionMinorThesis-main/)
+- **GitHub Pages:** [논문 온라인 보기](https://inha20.github.io/2SymmetricBooleanFunctionMinorThesis/)
 - **논문 원문 (Markdown):** [`thesis.md`](./thesis.md)
 
 ---
@@ -68,8 +68,6 @@ This paper provides key empirical observations for Structure Recognition Theory 
 ├── index.html           # GitHub Pages 논문 렌더링
 ├── README.md
 ├── RESEARCH_CONTEXT.md  # 연구 프로그램 맥락
-├── PROJECT_STATUS.md    # 현재 상태 및 향후 연구 방향
-├── .gitignore
 └── images/              # 논문 그림 (그림 1~13)
     ├── 01.png           # 그림 1: 4변수 카르노맵의 Gray Code 배열
     ├── 02.png           # 그림 2: Boolean 공간의 Layer 구조
@@ -79,9 +77,9 @@ This paper provides key empirical observations for Structure Recognition Theory 
     ├── 06.png           # 그림 6: Exactly-3 모서리 패턴
     ├── 07.png           # 그림 7: Exactly-4 점 패턴
     ├── 08.png           # 그림 8: XOR 체커보드 (0132)
-    ├── 09.png           # 그림 9: XNOR 체커보드 (0132)
-    ├── 10.png           # 그림 10: XOR 이중대각 (0123)
-    ├── 11.png           # 그림 11: XNOR 이중대각 (0123)
+    ├── 09.png           # 그림 11: XNOR 이중대각 (0123)
+    ├── 10.png           # 그림 10: XNOR 체커보드 (0132)
+    ├── 11.png           # 그림 9: XOR 이중대각 (0123)
     ├── 12.png           # 그림 12: XOR 체커보드 생성 원리
     └── 13.png           # 그림 13: Layer 구조와 시각 패턴 관계 모형
 ```
@@ -129,7 +127,7 @@ This repository is part of the **Structure Recognition Research Program**.
 | [3VariableRearrangementInvarianceMinorThesis](https://github.com/inha20/3VariableRearrangementInvarianceMinorThesis) | Empirical Case Study 3 |
 | [4StructureRecognitionTheory](https://github.com/inha20/4StructureRecognitionTheory) | Theoretical Hub |
 
-**Master Handover Document:** [MasterHandoverDocument.md](https://github.com/inha20/Research-Portfolio/blob/main/ProjectManagement/MasterHandoverDocument.md)
+**AI 단일 진입점:** [SESSION_START.md](https://github.com/inha20/inha20/blob/main/SESSION_START.md)
 
 ---
 
