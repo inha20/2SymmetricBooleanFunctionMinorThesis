@@ -719,7 +719,7 @@
       <!-- Hero Action Bar -->
       <div class="action-bar">
         <a href="01_thesis.pdf" class="btn btn-primary" download title="논문 PDF 다운로드">
-          <span>📄 논문 PDF 다운로드 (15p · 311KB)</span>
+          <span>📄 논문 PDF 다운로드 (16p · 316KB)</span>
         </a>
         <a href="https://github.com/inha20/2SymmetricBooleanFunctionMinorThesis" target="_blank" rel="noopener" class="btn btn-secondary">
           <span>💻 GitHub 리포지토리</span>
@@ -824,7 +824,7 @@
       <p>
         본 연구는 4변수 카르노맵(총 16개 입력 상태)을 대상으로 수행하였다.
         완전대칭함수 중 Exactly-$k$ 함수와 XOR/XNOR 함수를 선정하고,
-        Gray Code 배열(0132)과 일반 이진 배열(0123)을 교차 비교하여 시각적 대칭, 동일, 체커보드, 이중대각, 고리 패턴의 5대 분류 체계를 수립하였다.
+        Gray Code 배열(0132)과 일반 이진 배열(0123)을 교차 비교하여 시각적 대칭·동일의 개념을 정의하고, 점·모서리·고리·체커보드·이중대각 패턴의 5대 분류 체계를 수립하였다.
       </p>
     </section>
 
@@ -883,7 +883,7 @@
 
       <figure class="academic-figure">
         <img src="images/02.png" alt="그림 2. Boolean 공간의 Layer 구조" />
-        <figcaption><strong>그림 2.</strong> 4변수 Boolean 공간을 Hamming Weight에 따라 Layer로 분류한 결과. 각 Layer의 상태 수는 $1\text{-}4\text{-}6\text{-}4\text{-}1$ 구조를 이루며 파스칼 삼각형 계수와 대응된다.</figcaption>
+        <figcaption><strong>그림 2.</strong> 4변수 Boolean 공간을 Hamming Weight에 따라 Layer로 분류한 결과. 각 Layer의 상태 수는 $1\text{-}4\text{-}6\text{-}4\text{-}1$ 구조를 이루며 파스칼 삼각형 계수와 대응된다. 그림의 라벨 L1–L5는 본문의 $L_0$–$L_4$(Weight 0–4)에 해당한다.</figcaption>
       </figure>
 
       <h3 id="theory-relation">2.5 Layer 구조와 시각 패턴의 인과 체계</h3>
@@ -906,7 +906,7 @@
       <h3>3.2 체커보드 패턴 vs 이중대각 패턴</h3>
       <p>
         <strong>체커보드 패턴</strong>은 인접한 모든 셀의 값이 반대가 되는 구조이며,
-        <strong>이중대각 패턴</strong>은 주대각선($y=x$)과 부대각선($y=-x$) 대칭을 동시에 가지는 격자 형태이다.
+        <strong>이중대각 패턴</strong>은 주대각선($y=x$)과 부대각선($y=-x$) 대칭에 더해 좌우·상하 반사 대칭도 동시에 가지는 격자 형태이다.
       </p>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
@@ -938,7 +938,7 @@
 
       <h3>4.1 Exactly-0 & Exactly-4 함수 — 점 패턴 (Point Pattern)</h3>
       <p>
-        $L_0$ 및 $L_4$는 각각 1개 상태만을 가지며 카르노맵 모서리에 단일 점으로 나타난다.
+        $L_0$ 및 $L_4$는 각각 1개 상태만을 가지며 카르노맵의 한 셀에 단일 점으로 나타난다(Exactly-0은 왼쪽 위 모서리 셀 0000, Exactly-4는 중앙 영역의 셀 1111).
       </p>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
@@ -954,7 +954,7 @@
 
       <h3>4.2 Exactly-1 & Exactly-3 함수 — 모서리 패턴 (Corner Pattern)</h3>
       <p>
-        $L_1$ 및 $L_3$은 각각 4개 상태를 가지며, 4변수 카르노맵의 사방 모서리 방향으로 분산 배치되는 구조적 쌍대성을 가진다.
+        $L_1$ 및 $L_3$은 각각 4개 상태를 가지며, 4변수 카르노맵(양 끝을 이어 붙인 인접 관계 기준)에서 각각 $L_0$ 셀과 $L_4$ 셀의 상하좌우 이웃 네 칸으로 배치되는 구조적 쌍대성을 가진다.
       </p>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
@@ -970,7 +970,7 @@
 
       <h3>4.3 Exactly-2 함수 — 고리 패턴 (Ring Pattern)</h3>
       <p>
-        Boolean 공간의 최다 상태 Layer인 $L_2$ (6개 상태)는 Gray Code 위에서 닫힌 고리 형태의 기하학적 띠를 형성한다.
+        Boolean 공간의 최다 상태 Layer인 $L_2$ (6개 상태)는 Gray Code 위에서 서로 인접하지는 않지만 대각 방향으로(양 끝의 이어짐 포함) 이어져 닫힌 고리와 유사한 띠로 인식된다.
       </p>
 
       <figure class="academic-figure">
@@ -1014,12 +1014,12 @@
       </p>
       <p>$$L_0 \longleftrightarrow L_1 \longleftrightarrow L_2 \longleftrightarrow L_3 \longleftrightarrow L_4$$</p>
       <p>
-        따라서 인접한 두 셀은 홀짝성이 반드시 반대이며, 홀수 Layer 선택 함수는 Gray Code 위에서 <strong>필연적으로 체커보드 패턴</strong>을 산출한다.
+        따라서 인접한 두 셀은 홀짝성이 반드시 반대이며, 홀수 Layer 전체($L_1 \cup L_3$)를 선택하는 함수는 Gray Code 위에서 <strong>필연적으로 체커보드 패턴</strong>을 산출한다.
       </p>
 
       <figure class="academic-figure">
         <img src="images/12.png" alt="그림 12. XOR 체커보드 생성 원리" />
-        <figcaption><strong>그림 12.</strong> XOR 함수의 체커보드 패턴 생성 과정. 홀수 Layer 선택 구조와 Gray Code 배열의 인접성 보존 성질이 결합되어 인접 셀 출력 반전이 발생하고, 그 결과 체커보드 패턴이 형성된다.</figcaption>
+        <figcaption><strong>그림 12.</strong> Layer 구조가 배열 방식(0132/0123)에 따라 체커보드 또는 이중대각 패턴으로 표현되는 과정의 개념도. XOR의 경우 홀수 Layer 선택 구조와 Gray Code 배열의 인접성 보존 성질이 결합되어 인접 셀 출력 반전이 발생하고, 그 결과 체커보드 패턴이 형성된다.</figcaption>
       </figure>
     </section>
 
@@ -1029,7 +1029,7 @@
 
       <h3>6.1 패턴 형성의 이중 원인 모형</h3>
       <p>
-        본 연구의 분석은 시각 패턴이 단일 원인이 아닌 **함수의 성질(Layer 구조)**과 **표현의 성질(배열 방식)**의 상호작용임을 입증한다.
+        본 연구의 분석은 시각 패턴이 단일 원인이 아닌 **함수의 성질(Layer 구조)**과 **표현의 성질(배열 방식)**의 상호작용일 수 있음을 시사한다.
       </p>
 
       <div class="tbl-wrap">
@@ -1053,12 +1053,12 @@
       <h2>7. 결론 및 탐색적 가설</h2>
       <div class="card" style="border-left: 5px solid var(--accent); background: var(--surface);">
         <p style="font-family: var(--font-serif); font-size: 1.15rem; font-style: italic; margin-bottom: 0;">
-          "카르노맵의 주요 시각 패턴은 Boolean 공간의 Layer 구조가 특정 배열 방식 위에 투영된 결과이다."
+          "카르노맵의 주요 시각 패턴은 Boolean 공간의 Layer 구조가 특정 배열 방식 위에 투영된 결과일 수 있다."
         </p>
       </div>
       <p>
         본 연구는 점, 모서리, 고리, 체커보드 패턴이 개별적 우연이 아니라 <strong>파스칼 삼각형 Layer 구조와 인접성 보존 배열의 결합</strong>이라는 공통 원리로 통합 설명될 수 있음을 시사한다.
-        이를 통해 카르노맵은 단순한 회로 간소화 도구를 넘어 고차원 Boolean 공간 구조를 탐색하는 시각 인지 도구로 재해석된다.
+        이를 통해 카르노맵은 단순한 회로 간소화 도구를 넘어 4변수 Boolean 공간의 구조를 시각적으로 표현하는 도구로 재해석될 수 있다.
       </p>
     </section>
 
@@ -1067,7 +1067,7 @@
       <h2>참고문헌 (References)</h2>
       <div class="card">
         <ol style="padding-left: 1.5rem; font-size: 0.92rem; line-height: 1.8; color: var(--text-muted);">
-          <li>Karnaugh, M. (1953). "The Map Method for Synthesis of Combinational Logic Circuits." <em>Transactions of the AIEE</em>, 72(9), 593–599.</li>
+          <li>Karnaugh, M. (1953). "The Map Method for Synthesis of Combinational Logic Circuits." <em>Transactions of the AIEE</em>, 72(5), 593–599.</li>
           <li>Veitch, E. W. (1952). "A Chart Method for Simplifying Truth Functions." <em>Proceedings of the ACM</em>, 127–133.</li>
           <li>Gray, F. (1953). "Pulse Code Communication." U.S. Patent 2,632,058.</li>
           <li>Roth, C. H. <em>Fundamentals of Logic Design</em>. Cengage Learning.</li>

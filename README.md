@@ -10,7 +10,7 @@
 
 ## Abstract
 
-This thesis analyzes the visual patterns of symmetric Boolean functions appearing in 4-variable Karnaugh maps and interprets them through the lens of Hamming Weight-based Layer structure. Rather than treating Karnaugh maps solely as logic minimization tools, this research reframes them as **visualization instruments for Boolean space structure**. The study classifies five pattern types (point, corner, ring, checkerboard, double-diagonal), demonstrates that symmetric Boolean functions select specific Hamming Weight Layers, and explains why XOR/XNOR functions produce checkerboard patterns as a structural consequence of odd-layer selection combined with Gray Code adjacency preservation.
+This thesis analyzes the visual patterns of symmetric Boolean functions appearing in 4-variable Karnaugh maps and interprets them through the lens of Hamming Weight-based Layer structure. Rather than treating Karnaugh maps solely as logic minimization tools, this research reframes them as **visualization instruments for Boolean space structure**. The study classifies five pattern types (point, corner, ring, checkerboard, double-diagonal), demonstrates that symmetric Boolean functions select specific Hamming Weight Layers, and explains why XOR/XNOR functions produce checkerboard patterns as a structural consequence of parity-layer selection (all odd layers for XOR, all even layers for XNOR) combined with Gray Code adjacency preservation.
 
 ---
 
@@ -34,7 +34,7 @@ Paper 3: Variable Rearrangement Invariance
 Paper 4: Structure Recognition Theory   (theoretical hub)
 ```
 
-This paper provides key empirical observations for Structure Recognition Theory (Paper 4), particularly supporting H2 (Representation Transformation) and H1 (Structure Discoverer) hypotheses.
+This paper provides key empirical observations for Structure Recognition Theory (Paper 4), particularly as an exploratory illustration related to the H2 (Representation Transformation) and H1 (Structure Discoverer) hypotheses; it contains no human-subject data and does not test them.
 
 ---
 
@@ -49,7 +49,7 @@ This paper provides key empirical observations for Structure Recognition Theory 
 
 본 논문은 4변수 카르노맵에 나타나는 완전대칭함수(Symmetric Boolean Function)의 시각 패턴을 분석하고, 이를 Hamming Weight 기반 Layer 구조의 관점에서 해석한 탐색적 연구이다.
 
-카르노맵은 일반적으로 논리식 최소화 도구로 사용되지만, 본 연구는 카르노맵을 **Boolean 공간 구조의 시각화 도구**로 재해석하는 새로운 관점을 제시한다.
+카르노맵은 일반적으로 논리식 최소화 도구로 사용되지만, 본 연구는 카르노맵을 **Boolean 공간 구조의 시각화 도구**로 재해석하는 관점을 탐색적으로 제안한다.
 
 ---
 
