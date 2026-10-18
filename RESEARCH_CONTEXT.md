@@ -216,8 +216,8 @@ Paper 4: Structure Recognition Theory  (이론적 허브)
 | Exactly-k 함수가 특징적 패턴을 생성함 | H5 (설명 기대: "왜 이 패턴이 항상 나타나는가?") |
 
 ### 프로그램 핵심 문서 바로가기
-- [MasterHandoverDocument → SESSION_START.md](../inha20/SESSION_START.md)
-- [ResearchProgramArchitecture → SESSION_START.md](../inha20/SESSION_START.md)
-- [Structure Recognition Theory (Unified)](../inha20/StructureRecognitionTheory_Unified.md)
+- [MasterHandoverDocument → SESSION_START.md](https://github.com/inha20/inha20/blob/main/SESSION_START.md)
+- [ResearchProgramArchitecture → SESSION_START.md](https://github.com/inha20/inha20/blob/main/SESSION_START.md)
+- [Structure Recognition Theory (Unified)](https://github.com/inha20/inha20/blob/main/StructureRecognitionTheory_Unified.md)
 
 *아키텍처 교차 참조 최종 갱신: 2026-06-05*
