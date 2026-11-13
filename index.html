@@ -575,7 +575,7 @@
     }
     .toc-list {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
       gap: 0.6rem 1.5rem;
       list-style: none;
     }
@@ -638,11 +638,64 @@
       .subnav-inner { gap: 0.8rem; }
     }
   </style>
+<meta name="author" content="Jonghun Choi">
+<link rel="canonical" href="https://inha20.github.io/2SymmetricBooleanFunctionMinorThesis/">
+<link rel="icon" href="https://inha20.github.io/Research-Portfolio/assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d0f17">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#fbfbf9">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Structure Recognition Research Program">
+<meta property="og:title" content="카르노맵의 시각적 패턴과 Boolean 공간 구조의 대응 관계 연구 | Paper 2">
+<meta property="og:description" content="인하공업전문대학 2학년 재학 독립 연구자 최종훈의 소논문. 4변수 카르노맵 완전대칭함수의 시각 패턴을 분석하고, 이를 Hamming Weight 기반 Layer 구조와 Gray Code 인접성 보존 성질의 상호작용으로 해석합니다.">
+<meta property="og:url" content="https://inha20.github.io/2SymmetricBooleanFunctionMinorThesis/">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://inha20.github.io/Research-Portfolio/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The question “How do humans come to see something new?” beside a Karnaugh map checkerboard">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="카르노맵의 시각적 패턴과 Boolean 공간 구조의 대응 관계 연구 | Paper 2">
+<meta name="twitter:description" content="인하공업전문대학 2학년 재학 독립 연구자 최종훈의 소논문. 4변수 카르노맵 완전대칭함수의 시각 패턴을 분석하고, 이를 Hamming Weight 기반 Layer 구조와 Gray Code 인접성 보존 성질의 상호작용으로 해석합니다.">
+<meta name="twitter:image" content="https://inha20.github.io/Research-Portfolio/assets/og.png">
+<script>(function(){try{var t=localStorage.getItem('sr_theme');if(t!=='dark'&&t!=='light'){t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
+<style id="program-shell">
+/* ── program shell (2026-11): shared by every page of the research program ── */
+html[data-theme="light"]{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
+/* contrast: accent and faint text colours that fell below 4.5:1 on their own backgrounds */
+html[data-theme="light"]{--text-faint:#666a7e;--teal:#0f766e;--amber:#a64b08;--emerald:#047857;--rose:#be123c;--violet:#6d28d9;--purple:#6d28d9}
+html[data-theme="dark"]{--text-faint:#8a8fa9}
+html[data-theme="dark"] .btn-primary,html[data-theme="dark"] .brand-mark{color:#0d0f17}
+/* keyboard and motion */
+:where(a,button,summary,[tabindex]):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.skip-link{position:absolute;left:12px;top:-60px;z-index:1000;padding:.55rem .9rem;border-radius:6px;background:var(--text);color:var(--bg);font-size:.85rem;font-weight:600;text-decoration:none}
+.skip-link:focus{top:12px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+/* long display equations scroll inside their own box instead of widening the page; hidden MathML must stay inside scrollers */
+.katex-display{overflow-x:auto;overflow-y:hidden;max-width:100%}
+.tbl-wrap,.table-wrap,pre{position:relative}
+/* header: the page name shrinks instead of pushing the menu off a narrow screen */
+a.brand{color:inherit;text-decoration:none}
+.nav-inner{min-width:0}
+.nav-inner>*:not(.brand){flex:none}
+.brand{min-width:0}
+.brand-mark{flex:none}
+.brand>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* menus open on tap, click and keyboard focus as well as on hover */
+.nav-dropdown.open .nav-dropdown-content{display:block}
+.global-nav-trigger:focus+.global-nav-dropdown{display:none}
+.global-nav.open .global-nav-dropdown{display:block!important}
+@media (max-width:640px){
+  .global-nav{position:static}
+  .global-nav-dropdown{left:12px!important;right:12px;min-width:0!important;max-height:calc(100vh - 80px);overflow-y:auto}
+}
+/*end-shell*/.site-footer a{text-decoration:underline;text-underline-offset:.18em}</style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 
   <!-- ── Archive notice (보관된 이전 연구 노트) ── -->
-  <div role="note" style="background: var(--accent-surface); color: var(--text-muted); border-bottom: 1px solid var(--border); padding: 0.4rem 1rem; font-size: 0.8rem; line-height: 1.5; text-align: center;"><strong style="color: var(--text);">보관된 이전 연구 노트.</strong> 이 포털의 내용은 <a href="https://inha20.github.io/7KarnaughGroupClassification/" style="color: var(--accent); font-weight: 600; text-decoration: underline;">7번 논문</a>(수학)과 <a href="https://inha20.github.io/8StructuralThinkingAndHumanAICollaboration/" style="color: var(--accent); font-weight: 600; text-decoration: underline;">8번 논문</a>(이론과 사례)으로 정리·정정되었습니다. 일부 서술에는 정정 전 내용이 있을 수 있으니 인용은 7·8번을 사용해 주세요.</div>
+  <div role="region" aria-label="보관 안내" style="background: var(--accent-surface); color: var(--text-muted); border-bottom: 1px solid var(--border); padding: 0.4rem 1rem; font-size: 0.8rem; line-height: 1.5; text-align: center;"><strong style="color: var(--text);">보관된 이전 연구 노트.</strong> 이 포털의 내용은 <a href="https://inha20.github.io/7KarnaughGroupClassification/" style="color: var(--accent); font-weight: 600; text-decoration: underline;">7번 논문</a>(수학)과 <a href="https://inha20.github.io/8StructuralThinkingAndHumanAICollaboration/" style="color: var(--accent); font-weight: 600; text-decoration: underline;">8번 논문</a>(이론과 사례)으로 정리·정정되었습니다. 일부 서술에는 정정 전 내용이 있을 수 있으니 인용은 7·8번을 사용해 주세요.</div>
 
   <!-- ── Global Site Header ── -->
   <header class="site-header">
@@ -653,15 +706,15 @@
       </a>
 
       <div style="display: flex; align-items: center; gap: 0.85rem;">
-        <nav class="nav-links">
+        <nav class="nav-links" aria-label="Program links">
           <a href="https://inha20.github.io/Research-Portfolio/">Research Program</a>
-          <a href="https://github.com/inha20/inha20">Profile</a>
+          <a href="https://github.com/inha20">Profile</a>
           <a href="https://github.com/inha20/2SymmetricBooleanFunctionMinorThesis" target="_blank" rel="noopener">GitHub</a>
         </nav>
 
         <!-- Program Jump Menu -->
         <div class="nav-dropdown">
-          <button class="nav-dropbtn" aria-label="논문 이동 메뉴">
+          <button class="nav-dropbtn" aria-label="Papers · 논문 이동 메뉴">
             <span>Papers</span>
             <span style="font-size:0.65rem;">▼</span>
           </button>
@@ -689,7 +742,7 @@
   </header>
 
   <!-- ── Subnav Section Quick-jump ── -->
-  <nav class="subnav">
+  <nav class="subnav" aria-label="On this page">
     <div class="container subnav-inner">
       <a href="#abstract">초록</a>
       <a href="#intro">1. 서론</a>
@@ -703,7 +756,7 @@
     </div>
   </nav>
 
-  <main class="container">
+  <main class="container" id="main">
 
     <!-- ── Hero ── -->
     <section class="hero">
@@ -912,7 +965,7 @@
         <strong>이중대각 패턴</strong>은 주대각선($y=x$)과 부대각선($y=-x$) 대칭에 더해 좌우·상하 반사 대칭도 동시에 가지는 격자 형태이다.
       </p>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 1rem; margin: 1.5rem 0;">
         <div class="card" style="margin:0; padding:1.2rem;">
           <b style="color:var(--accent); font-family:var(--font-mono);">체커보드 패턴 (Gray Code 0132)</b>
           <pre style="margin-top:0.6rem;">0  1  0  1
@@ -944,7 +997,7 @@
         $L_0$ 및 $L_4$는 각각 1개 상태만을 가지며 카르노맵의 한 셀에 단일 점으로 나타난다(Exactly-0은 왼쪽 위 모서리 셀 0000, Exactly-4는 중앙 영역의 셀 1111).
       </p>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1.5rem;">
         <figure class="academic-figure">
           <img src="images/03.png" alt="그림 3. Exactly-0 점 패턴" />
           <figcaption><strong>그림 3.</strong> Exactly-0 함수의 카르노맵 표현. Weight = 0 상태만 선택되므로 단일 점(Point Pattern)으로 나타난다.</figcaption>
@@ -960,7 +1013,7 @@
         $L_1$ 및 $L_3$은 각각 4개 상태를 가지며, 4변수 카르노맵(양 끝을 이어 붙인 인접 관계 기준)에서 각각 $L_0$ 셀과 $L_4$ 셀의 상하좌우 이웃 네 칸으로 배치되는 구조적 쌍대성을 가진다.
       </p>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1.5rem;">
         <figure class="academic-figure">
           <img src="images/04.png" alt="그림 4. Exactly-1 모서리 패턴" />
           <figcaption><strong>그림 4.</strong> Exactly-1 함수의 카르노맵 표현. Weight = 1 상태 4개가 모서리 방향으로 분산된다.</figcaption>
@@ -986,7 +1039,7 @@
         XOR은 홀수 Layer ($L_1 \cup L_3$, 8개 셀), XNOR은 짝수 Layer ($L_0 \cup L_2 \cup L_4$, 8개 셀)를 선택한다.
       </p>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 1.5rem;">
         <figure class="academic-figure">
           <img src="images/08.png" alt="그림 8. XOR 체커보드 (0132)" />
           <figcaption><strong>그림 8.</strong> Gray Code (0132) 배열에서의 XOR 체커보드 패턴.</figcaption>
@@ -1120,7 +1173,6 @@
 
     function setTheme(theme) {
       htmlEl.setAttribute('data-theme', theme);
-      localStorage.setItem('sbf_theme', theme);
       if (theme === 'dark') {
         themeIcon.innerHTML = `<path d="${sunPath}"></path>`;
       } else {
@@ -1128,7 +1180,7 @@
       }
     }
 
-    const savedTheme = localStorage.getItem('sbf_theme') || 'light';
+    const savedTheme = document.documentElement.getAttribute('data-theme') || 'light';
     setTheme(savedTheme);
 
     themeToggle.addEventListener('click', () => {
@@ -1167,5 +1219,40 @@
       });
     });
   </script>
+<script id="program-shell-js">
+(function(){
+  'use strict';
+  var menus=[].slice.call(document.querySelectorAll('.nav-dropdown,.global-nav'));
+  var closing=false;
+  function setOpen(m,open){m.classList.toggle('open',open);var b=m.querySelector('button');if(b)b.setAttribute('aria-expanded',open?'true':'false');}
+  menus.forEach(function(m){
+    var b=m.querySelector('button');if(!b)return;
+    b.setAttribute('aria-haspopup','true');b.setAttribute('aria-expanded','false');
+    b.addEventListener('click',function(e){e.stopPropagation();setOpen(m,!m.classList.contains('open'));});
+  });
+  menus.forEach(function(m){
+    m.addEventListener('focusin',function(e){if(closing)return;if(e.target.matches&&e.target.matches(':focus-visible'))setOpen(m,true);});
+    m.addEventListener('focusout',function(e){if(!e.relatedTarget||!m.contains(e.relatedTarget))setOpen(m,false);});
+  });
+  document.addEventListener('click',function(e){menus.forEach(function(m){if(!m.contains(e.target))setOpen(m,false);});});
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Escape')return;
+    menus.forEach(function(m){if(!m.classList.contains('open'))return;
+      closing=true;setOpen(m,false);var b=m.querySelector('button');if(b)b.focus();closing=false;
+    });
+  });
+  var tt=document.getElementById('themeToggle');
+  if(tt)tt.addEventListener('click',function(){try{localStorage.setItem('sr_theme',document.documentElement.getAttribute('data-theme'));}catch(e){}});
+  function scrollers(){
+    [].forEach.call(document.querySelectorAll('main *'),function(el){
+      if(el.hasAttribute('tabindex'))return;
+      var cs=getComputedStyle(el);
+      if((cs.overflowX==='auto'||cs.overflowX==='scroll')&&el.scrollWidth>el.clientWidth+1)el.setAttribute('tabindex','0');
+    });
+  }
+  scrollers();addEventListener('load',scrollers);
+  var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(scrollers,200);});
+})();
+</script>
 </body>
 </html>
